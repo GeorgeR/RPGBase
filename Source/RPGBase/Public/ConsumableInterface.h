@@ -17,8 +17,8 @@ class RPGBASE_API IConsumableInterface
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Consumable")
-	bool CanConsume(AActor* InTargetWearer);
+	bool CanConsume(AActor* InTargetConsumer);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Consumable")
-	void Consume(AActor* InTargetWearer);
+	void Consume(AActor* InTargetConsumer);
 };
