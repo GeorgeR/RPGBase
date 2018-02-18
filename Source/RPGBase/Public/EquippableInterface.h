@@ -23,5 +23,5 @@ public:
 	void Equip(AActor* InTargetWearer, FName InTargetSocket, int32 InTargetSlot);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Equippable")
-	void UnEquip(AActor* InWearer, FName InTargetSocket, int32 InTargetSlot);
+	void UnEquip(AActor* InWearer, FName InSocket, int32 InSlot);
 };

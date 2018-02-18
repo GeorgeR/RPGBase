@@ -53,7 +53,7 @@ UNullItem* UNullItem::Get()
 {
 	static UNullItem* Instance = nullptr;
 	if (Instance == nullptr)
-		Instance = NewObject<UNullItem>(nullptr);
+		Instance = NewObject<UNullItem>();
 
 	return Instance;
 }

@@ -16,7 +16,7 @@
 	"Modules": [
 		{
 			"Name": "RPGBase",
-			"Type": "Developer",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	]
