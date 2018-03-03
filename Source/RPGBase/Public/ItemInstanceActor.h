@@ -2,10 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ItemInstance.h"
 
-#include "ItemActor.generated.h"
-
-class UItem;
+#include "ItemInstanceActor.generated.h"
 
 UCLASS()
 class RPGBASE_API AItemActor
@@ -15,5 +14,5 @@ class RPGBASE_API AItemActor
 	
 public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	UItem* Item;
+	FItemInstance ItemInstance;
 };
