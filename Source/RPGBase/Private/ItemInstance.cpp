@@ -58,19 +58,29 @@ FItemInstance FItemInstance::Clone(int32 InStackSize)
 	return Result;
 }
 
-#if WITH_NETWORKING
 void FItemInstance::PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer)
 {
+	/* Note that as per the documentation, the order of items is different on the Client and Server.
+	It doesn't matter, the index of for client-side UI effects. */
 	if (InArraySerializer.Owner != nullptr)
-		InArraySerializer.Owner->OnItemRemoved(*this);
+	{
+		int32 Index = InArraySerializer.Items.IndexOfByKey(*this);
+		InArraySerializer.Owner->OnItemRemoved.Broadcast(*this, Index);
+	}
 }
 
 void FItemInstance::PostReplicatedAdd(const struct FItemInstanceArray& InArraySerializer)
 {
+	/* Note that as per the documentation, the order of items is different on the Client and Server. 
+	It doesn't matter, the index of for client-side UI effects. */
 	if (InArraySerializer.Owner != nullptr)
-		InArraySerializer.Owner->OnItemAdded(*this);
+	{
+		int32 Index = InArraySerializer.Items.IndexOfByKey(*this);
+		InArraySerializer.Owner->OnItemAdded.Broadcast(*this, Index);
+	}
 }
-#endif
+
+bool FItemInstance::operator==(const FItemInstance& InOther) const { return Id == InOther.Id; }
 
 TSubclassOf<UItem> FItemInstance::GetItemClass()
 {
