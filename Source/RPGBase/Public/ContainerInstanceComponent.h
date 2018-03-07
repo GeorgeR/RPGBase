@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Container.h"
+#include "ContainerInstanceAccessor.h"
+#include "AssociationAccessor.h"
 
 #include "ContainerInstanceComponent.generated.h"
 
@@ -13,9 +15,18 @@ class RPGBASE_API UContainerInstanceComponent
 {
 	GENERATED_BODY()
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, const FItemInstance&, InItem, int32, InSlot);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemoved, const FItemInstance&, InItem, int32, InSlot);
+
 public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	UContainer* Container;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnItemAdded OnItemAdded;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnItemRemoved OnItemRemoved;
 
 	UContainerInstanceComponent();
 	
@@ -27,46 +38,38 @@ public:
 	bool AddItem(const FItemInstance& InItem, int32 InSlot = -1);
 	virtual bool AddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
 
-	/* Respond to this for UI stuff */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
-	void OnItemAdded(const FItemInstance& InItem);
-	virtual void OnItemAdded_Implementation(const FItemInstance& InItem) { }
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "AddItem"))
+	bool AddItem_MP(UContainerInstanceAccessor* InAccessor, const FItemInstance& InItem, int32 InSlot = -1);
 
 	/* Removes an the item at the specified slot, returns the item that was removed. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
-	FItemInstance RemoveItem(int32 InSlot);
-	virtual FItemInstance RemoveItem_Implementation(int32 InSlot);
+	void RemoveItem(int32 InSlot);
+	virtual void RemoveItem_Implementation(int32 InSlot);
 
-	/* Respond to this for UI stuff */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
-	void OnItemRemoved(FItemInstance& InItem);
-	virtual void OnItemRemoved_Implementation(FItemInstance& InItem) { }
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "RemoveItem"))
+	void RemoveItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSlot);
 
 	/* Swaps items between the specified slots. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
-	void SwapItems(int32 InSlotLeft, int32 InSlotRight);
-	virtual void SwapItems_Implementation(int32 InSlotLeft, int32 InSlotRight);
+	void SwapItems(int32 InSourceSlot, int32 InDestinationSlot);
+	virtual void SwapItems_Implementation(int32 InSourceSlot, int32 InDestinationSlot);
+
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "SwapItem"))
+	void SwapItems_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, int32 InDestinationSlot);
+
+	/* Transfer an item between containers. */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
+	bool TransferItem(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+	virtual bool TransferItem_Implementation(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "TransferItem"))
+	bool TransferItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	FItemInstanceArray Items;
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_AddItem(const FItemInstance& InItem, int32 InSlot = -1);
-	virtual bool Server_AddItem_Validate(const FItemInstance& InItem, int32 InSlot = -1);
-	virtual void Server_AddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_RemoveItem(int32 InSlot);
-	virtual bool Server_RemoveItem_Validate(int32 InSlot);
-	virtual void Server_RemoveItem_Implementation(int32 InSlot);
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_SwapItems(int32 InSlotLeft, int32 InSlotRight);
-	virtual bool Server_SwapItems_Validate(int32 InSlotLeft, int32 InSlotRight);
-	virtual void Server_SwapItems_Implementation(int32 InSlotLeft, int32 InSlotRight);
 
 	/* Returns first available slot index, -1 if none available. */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")

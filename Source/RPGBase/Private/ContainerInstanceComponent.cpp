@@ -4,79 +4,111 @@
 
 UContainerInstanceComponent::UContainerInstanceComponent()
 {
+<<<<<<< HEAD
 	Container = nullptr;
 
 	if(Container != nullptr)
+=======
+	if (Container != nullptr)
+>>>>>>> 3a8e385f4f81ace3548fece8b70b843ccd848290
 	{
 		TArray<FItemInstance>& Items = this->Items;
 		Items.Init(UNullItem::GetInstance(), GetCapacity());
 	}
+<<<<<<< HEAD
+=======
+
+	this->Items.RegisterWithOwner(this);
+>>>>>>> 3a8e385f4f81ace3548fece8b70b843ccd848290
 }
 
 /* By default, this won't add the item if the slot is occupied. You might customize it to swap items with the source. */
 bool UContainerInstanceComponent::AddItem_Implementation(const FItemInstance& InItem, int32 InSlot)
 {
-#if WITH_NETWORKING
-	if (GetOwner()->HasAuthority())
-	{
+	if (InSlot == -1)
+		InSlot = GetFirstAvailableSlot();
+
+	if (IsSlotOccupied(InSlot))
+		return false;
+
+	TArray<FItemInstance>& Items = this->Items;
+	Items[InSlot] = InItem;
+
+#if !(WITH_NETWORKING)
+	// If networking is off, the fast array serializer isnt used so OnItemAdded is never fired
+	OnItemAdded.Broadcast(InItem, InSlot);
 #endif
-		if (InSlot == -1)
-			InSlot = GetFirstAvailableSlot();
 
-		if (IsSlotOccupied(InSlot))
-			return false;
+	return true;
+}
 
-		TArray<FItemInstance>& Items = this->Items;
-		Items[InSlot] = InItem;
-		return true;
-
-#if WITH_NETWORKING
-	}
-
-	Server_AddItem(InItem, InSlot);
+bool UContainerInstanceComponent::AddItem_MP(UContainerInstanceAccessor* InAccessor, const FItemInstance& InItem, int32 InSlot /*= -1*/)
+{
+	InAccessor->Server_AddItem(this, InItem, InSlot);
 	return false;
+}
+
+void UContainerInstanceComponent::RemoveItem_Implementation(int32 InSlot)
+{
+	if (!IsSlotOccupied(InSlot))
+		return;
+
+	TArray<FItemInstance>& Items = this->Items;
+	FItemInstance& Item = Items[InSlot];
+	Items.RemoveAt(InSlot, 1, false);
+	Items[InSlot] = UNullItem::GetInstance();
+
+#if !(WITH_NETWORKING)
+	// If networking is off, the fast array serializer isnt used so OnItemRemoved is never fired
+	OnItemRemoved.Broadcast(InItem, InSlot);
 #endif
 }
 
-FItemInstance UContainerInstanceComponent::RemoveItem_Implementation(int32 InSlot)
+void UContainerInstanceComponent::RemoveItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSlot)
 {
-#if WITH_NETWORKING
-	if (GetOwner()->HasAuthority())
-	{
+	InAccessor->Server_RemoveItem(this, InSlot);
+}
+
+void UContainerInstanceComponent::SwapItems_Implementation(int32 InSourceSlot, int32 InDestinationSlot)
+{
+	if (!IsSlotOccupied(InSourceSlot))
+		return;
+
+#if !(WITH_NETWORKING)
+	OnItemRemoved.Broadcast(Items[InSourceSlot], InSourceSlot);
+	OnItemRemoved.Broadcast(Items[InDestinationSlot], InDestinationSlot);
 #endif
-		if (!IsSlotOccupied(InSlot))
-			return UNullItem::GetInstance();
 
-		TArray<FItemInstance>& Items = this->Items;
-		FItemInstance& Item = Items[InSlot];
-		Items.RemoveAt(InSlot, 1, false);
-		Items[InSlot] = UNullItem::GetInstance();
+	TArray<FItemInstance>& Items = this->Items;
+	Items.Swap(InSourceSlot, InDestinationSlot);
 
-		return Item;
-#if WITH_NETWORKING
-	}
-
-	Server_RemoveItem(InSlot);
-	return UNullItem::GetInstance();
+#if !(WITH_NETWORKING)
+	OnItemAdded.Broadcast(Items[InSourceSlot], InSourceSlot);
+	OnItemAdded.Broadcast(Items[InDestinationSlot], InDestinationSlot);
 #endif
 }
 
-void UContainerInstanceComponent::SwapItems_Implementation(int32 InSlotLeft, int32 InSlotRight)
+void UContainerInstanceComponent::SwapItems_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, int32 InDestinationSlot)
 {
-#if WITH_NETWORKING
-	if (GetOwner()->HasAuthority())
-	{
-#endif
-		if (!IsSlotOccupied(InSlotLeft))
-			return;
+	InAccessor->Server_SwapItems(this, InSourceSlot, InDestinationSlot);
+}
 
-		TArray<FItemInstance>& Items = this->Items;
-		Items.Swap(InSlotLeft, InSlotRight);
-#if WITH_NETWORKING
-	}
+bool UContainerInstanceComponent::TransferItem_Implementation(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot)
+{
+	if (InDestinationContainer->IsSlotOccupied(InDestinationSlot) || !IsSlotOccupied(InSourceSlot))
+		return false;
 
-	Server_SwapItems(InSlotLeft, InSlotRight);
-#endif
+	TArray<FItemInstance>& Items = this->Items;
+	FItemInstance SourceItem = Items[InSourceSlot];
+
+	return InDestinationContainer->AddItem(SourceItem, InDestinationSlot);
+}
+
+bool UContainerInstanceComponent::TransferItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot)
+{
+	InAccessor->Server_TransferItem(this, InSourceSlot, InDestinationContainer, InDestinationSlot);
+
+	return false;
 }
 
 void UContainerInstanceComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -85,19 +117,6 @@ void UContainerInstanceComponent::GetLifetimeReplicatedProps(TArray<FLifetimePro
 
 	DOREPLIFETIME(UContainerInstanceComponent, Items);
 }
-
-// All these do is essentially ensure the wrapped calls are run on the server
-bool UContainerInstanceComponent::Server_AddItem_Validate(const FItemInstance& InItem, int32 InSlot /*= -1*/) { return true; }
-
-void UContainerInstanceComponent::Server_AddItem_Implementation(const FItemInstance& InItem, int32 InSlot /*= -1*/) { AddItem(InItem, InSlot); }
-
-bool UContainerInstanceComponent::Server_RemoveItem_Validate(int32 InSlot) { return true; }
-
-void UContainerInstanceComponent::Server_RemoveItem_Implementation(int32 InSlot) { RemoveItem(InSlot); }
-
-bool UContainerInstanceComponent::Server_SwapItems_Validate(int32 InSlotLeft, int32 InSlotRight) { return true; }
-
-void UContainerInstanceComponent::Server_SwapItems_Implementation(int32 InSlotLeft, int32 InSlotRight) { SwapItems(InSlotLeft, InSlotRight); }
 
 int32 UContainerInstanceComponent::GetFirstAvailableSlot()
 {

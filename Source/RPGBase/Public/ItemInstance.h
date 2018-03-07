@@ -46,10 +46,10 @@ public:
 
 	virtual FItemInstance Clone(int32 InStackSize);
 
-#if WITH_NETWORKING
 	void PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer);
 	void PostReplicatedAdd(const struct FItemInstanceArray& InArraySerializer);
-#endif
+
+	bool operator==(const FItemInstance& InOther) const;
 
 private:
 	UPROPERTY()
@@ -58,6 +58,8 @@ private:
 	TSubclassOf<class UItem> GetItemClass();
 };
 
+/* Remember to call MarkArrayDirty if an item is removed,
+MarkItemDirty if added or item changed. */
 USTRUCT(BlueprintType)
 struct RPGBASE_API FItemInstanceArray
 	: public FFastArraySerializer
@@ -78,6 +80,8 @@ public:
 	}
 
 private:
+	friend struct FItemInstance;
+
 	UPROPERTY()
 	TArray<FItemInstance> Items;
 };

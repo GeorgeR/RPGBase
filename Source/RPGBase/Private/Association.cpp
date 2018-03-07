@@ -1,43 +1,86 @@
 #include "Association.h"
 #include "Net/UnrealNetwork.h"
 
-UAssociation* UAssociation::Create(FName InAssociationName, FName InCreatorPlayerId, FName InCreatorRank, FText& OutMessage)
+void FAssociationMember::PreReplicatedRemove(const struct FAssociationMemberArray& InArraySerializer)
+{
+	if (InArraySerializer.Owner != nullptr)
+		InArraySerializer.Owner->OnMemberRemoved.Broadcast(*this);
+}
+
+void FAssociationMember::PostReplicatedAdd(const struct FAssociationMemberArray& InArraySerializer)
+{
+	if (InArraySerializer.Owner != nullptr)
+		InArraySerializer.Owner->OnMemberAdded.Broadcast(*this);
+}
+
+void FAssociationMemberArray::RegisterWithOwner(class UAssociation* InOwner)
+{
+	Owner = InOwner;
+}
+
+UAssociation::UAssociation()
+{
+	// TODO: OnInviteAccepted.
+
+	Members.RegisterWithOwner(this);
+}
+
+UAssociation* UAssociation::Create(FName InAssociationName, APlayerState* InCreator, FName InCreatorRank, FText& OutMessage)
 {
 	// TODO: Check if Creator is already in association
-
 	UAssociation* Result = NewObject<UAssociation>(nullptr);
 	
 	Result->Name = InAssociationName;
-	Result->AddMember(InCreatorPlayerId, InCreatorRank);
-	
+	Result->AddMember(InCreator, InCreatorRank);
+
 	return Result;
 }
 
-void UAssociation::OnInviteAccepted_Implementation(FName InInviteeId)
+void UAssociation::Create_MP(UAssociationAccessor* InAccessor, FName InAssociationName, APlayerState* InCreator, FName InCreatorRank)
 {
-	AddMember(InInviteeId, DefaultRank);
+	InAccessor->Server_Create(InAssociationName, InCreator, InCreatorRank);
 }
 
-bool UAssociation::AddMember_Implementation(FName InPlayerId, FName InRank /*= TEXT("")*/)
+bool UAssociation::Invite_Implementation(APlayerState* InInviter, APlayerState* InInvitee, FText& OutMessage)
 {
-	if (IsMember(InPlayerId))
-		return false;
+	// If InInvite is already in an association, return false
 
-	FAssociationMember NewMember;
-	NewMember.PlayerId = InPlayerId;
-	NewMember.Rank = InPlayerId;
-	NewMember.MemberSince = FDateTime::UtcNow();
-
-	Members.Add(NewMember);
 	return true;
 }
 
-// Default implementation doesn't care who the Dismisser is, you should definately override this
-bool UAssociation::RemoveMember_Implementation(FName InDismisserId, FName InMemberId)
+void UAssociation::Invite_MP(UAssociationAccessor* InAccessor, APlayerState* InInviter, APlayerState* InInvitee)
 {
+	InAccessor->Server_Invite(this, InInviter, InInvitee);
+}
+
+bool UAssociation::AddMember_Implementation(APlayerState* InPlayer, FName InRank /*= TEXT("")*/)
+{
+	if (IsMember(InPlayer))
+		return false;
+
+	FAssociationMember NewMember;
+	NewMember.PlayerId = FName(*InPlayer->UniqueId->ToString());
+	NewMember.Rank = InRank;
+	NewMember.MemberSince = FDateTime::UtcNow();
+
+	TArray<FAssociationMember>& Members = this->Members;
+	Members.Add(NewMember);
+
+	return true;
+}
+
+void UAssociation::AddMember_MP(UAssociationAccessor* InAccessor, APlayerState* InPlayer, FName InRank /*= TEXT("")*/)
+{
+	InAccessor->Server_AddMember(this, InPlayer, InRank);
+}
+
+// Default implementation doesn't care who the Dismisser is, you should definitely override this
+bool UAssociation::RemoveMember_Implementation(APlayerState* InDismisser, APlayerState* InMember)
+{
+	TArray<FAssociationMember>& Members = this->Members;
 	for (auto i = 0; i < Members.Num(); i++)
 	{
-		if (Members[i].PlayerId == InMemberId)
+		if (Members[i].PlayerId == FName(*InMember->UniqueId->ToString()))
 		{
 			Members.RemoveAt(i);
 			return true;
@@ -47,35 +90,55 @@ bool UAssociation::RemoveMember_Implementation(FName InDismisserId, FName InMemb
 	return false;
 }
 
-bool UAssociation::ChangeMemberRank_Implementation(FName InChangerId, FName InMemberId, FName InNewRank)
+void UAssociation::RemoveMember_MP(UAssociationAccessor* InAccessor, APlayerState* InDismisser, APlayerState* InMember)
+{
+	InAccessor->Server_RemoveMember(this, InDismisser, InMember);
+}
+
+bool UAssociation::ChangeMemberRank_Implementation(APlayerState* InChanger, APlayerState* InMember, FName InNewRank)
 {
 	FAssociationMember Member;
-	if (!GetMemberForPlayer(InMemberId, Member))
+	if (!GetMemberForPlayer(InMember, Member))
 		return false;
 
 	Member.Rank = InNewRank;
+
+	OnChangedRank.Broadcast(Member, InNewRank);
+
 	return true;
 }
 
-bool UAssociation::Disband_Implementation(FName InDisbanderId)
+void UAssociation::ChangeMemberRank_MP(UAssociationAccessor* InAccessor, APlayerState* InChanger, APlayerState* InMember, FName InNewRank)
 {
-	if(!IsMember(InDisbanderId))
+	InAccessor->Server_ChangeMemberRank(this, InChanger, InMember, InNewRank);
+}
+
+bool UAssociation::Disband_Implementation(APlayerState* InDisbander)
+{
+	if(!IsMember(InDisbander))
 		return false;
 
+	OnDisbanded.Broadcast();
 	// TODO: Destroy
 	return true;
 }
 
-bool UAssociation::IsMember(FName InPlayerId) const
+void UAssociation::Disband_MP(UAssociationAccessor* InAccessor, APlayerState* InDisbander)
 {
-	FAssociationMember Member;
-	return GetMemberForPlayer(InPlayerId, Member);
+	return InAccessor->Server_Disband(this, InDisbander);
 }
 
-bool UAssociation::GetMemberForPlayer(FName InPlayerId, FAssociationMember& OutMember) const
+bool UAssociation::IsMember(APlayerState* InPlayer)
 {
+	FAssociationMember Member;
+	return GetMemberForPlayer(InPlayer, Member);
+}
+
+bool UAssociation::GetMemberForPlayer(APlayerState* InPlayer, FAssociationMember& OutMember)
+{
+	TArray<FAssociationMember>& Members = this->Members;
 	for (auto& Member : Members)
-		if (Member.PlayerId == InPlayerId)
+		if (Member.PlayerId == FName(*InPlayer->UniqueId->ToString()))
 		{
 			OutMember = Member;
 			return true;
@@ -84,10 +147,10 @@ bool UAssociation::GetMemberForPlayer(FName InPlayerId, FAssociationMember& OutM
 	return false;
 }
 
-bool UAssociation::GetRankForPlayer(FName InPlayerId, FName& OutRank) const
+bool UAssociation::GetRankForPlayer(APlayerState* InPlayer, FName& OutRank)
 {
 	FAssociationMember Member;
-	if (GetMemberForPlayer(InPlayerId, Member))
+	if (GetMemberForPlayer(InPlayer, Member))
 	{
 		OutRank = Member.Rank;
 		return true;
