@@ -4,22 +4,13 @@
 
 UContainerInstanceComponent::UContainerInstanceComponent()
 {
-<<<<<<< HEAD
-	Container = nullptr;
-
-	if(Container != nullptr)
-=======
 	if (Container != nullptr)
->>>>>>> 3a8e385f4f81ace3548fece8b70b843ccd848290
 	{
 		TArray<FItemInstance>& Items = this->Items;
 		Items.Init(UNullItem::GetInstance(), GetCapacity());
 	}
-<<<<<<< HEAD
-=======
 
 	this->Items.RegisterWithOwner(this);
->>>>>>> 3a8e385f4f81ace3548fece8b70b843ccd848290
 }
 
 /* By default, this won't add the item if the slot is occupied. You might customize it to swap items with the source. */
