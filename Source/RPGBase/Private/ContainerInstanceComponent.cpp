@@ -1,10 +1,16 @@
 #include "ContainerInstanceComponent.h"
 #include "UnrealNetwork.h"
+#include "GameFramework/Actor.h"
 
 UContainerInstanceComponent::UContainerInstanceComponent()
 {
-	TArray<FItemInstance>& Items = this->Items;
-	Items.Init(UNullItem::GetInstance(), GetCapacity());
+	Container = nullptr;
+
+	if(Container != nullptr)
+	{
+		TArray<FItemInstance>& Items = this->Items;
+		Items.Init(UNullItem::GetInstance(), GetCapacity());
+	}
 }
 
 /* By default, this won't add the item if the slot is occupied. You might customize it to swap items with the source. */

@@ -34,9 +34,6 @@ public class RPGBase : ModuleRules
 				"SlateCore"
 			});
 
-		DynamicallyLoadedModuleNames.AddRange(
-			new string[]
-			{
-			});
+		DynamicallyLoadedModuleNames.AddRange(new string[] { });
 	}
 }
