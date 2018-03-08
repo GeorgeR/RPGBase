@@ -33,19 +33,19 @@ bool UContainerInstanceComponent::AddItem_Implementation(const FItemInstance& In
 	return true;
 }
 
-bool UContainerInstanceComponent::AddItem_MP(UContainerInstanceAccessor* InAccessor, const FItemInstance& InItem, int32 InSlot /*= -1*/)
+bool UContainerInstanceComponent::AddItem_MP(UContainerInstanceAccessor* InAccessor, const FItemInstance& InItem, const int32 InSlot /*= -1*/)
 {
 	InAccessor->Server_AddItem(this, InItem, InSlot);
 	return false;
 }
 
-void UContainerInstanceComponent::RemoveItem_Implementation(int32 InSlot)
+void UContainerInstanceComponent::RemoveItem_Implementation(const int32 InSlot)
 {
 	if (!IsSlotOccupied(InSlot))
 		return;
 
 	TArray<FItemInstance>& Items = this->Items;
-	FItemInstance& Item = Items[InSlot];
+	auto& Item = Items[InSlot];
 	Items.RemoveAt(InSlot, 1, false);
 	Items[InSlot] = UNullItem::GetInstance();
 
@@ -55,12 +55,12 @@ void UContainerInstanceComponent::RemoveItem_Implementation(int32 InSlot)
 #endif
 }
 
-void UContainerInstanceComponent::RemoveItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSlot)
+void UContainerInstanceComponent::RemoveItem_MP(UContainerInstanceAccessor* InAccessor, const int32 InSlot)
 {
 	InAccessor->Server_RemoveItem(this, InSlot);
 }
 
-void UContainerInstanceComponent::SwapItems_Implementation(int32 InSourceSlot, int32 InDestinationSlot)
+void UContainerInstanceComponent::SwapItems_Implementation(const int32 InSourceSlot, const int32 InDestinationSlot)
 {
 	if (!IsSlotOccupied(InSourceSlot))
 		return;
@@ -79,23 +79,23 @@ void UContainerInstanceComponent::SwapItems_Implementation(int32 InSourceSlot, i
 #endif
 }
 
-void UContainerInstanceComponent::SwapItems_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, int32 InDestinationSlot)
+void UContainerInstanceComponent::SwapItems_MP(UContainerInstanceAccessor* InAccessor, const int32 InSourceSlot, const int32 InDestinationSlot)
 {
 	InAccessor->Server_SwapItems(this, InSourceSlot, InDestinationSlot);
 }
 
-bool UContainerInstanceComponent::TransferItem_Implementation(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot)
+bool UContainerInstanceComponent::TransferItem_Implementation(const int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, const int32 InDestinationSlot)
 {
 	if (InDestinationContainer->IsSlotOccupied(InDestinationSlot) || !IsSlotOccupied(InSourceSlot))
 		return false;
 
 	TArray<FItemInstance>& Items = this->Items;
-	FItemInstance SourceItem = Items[InSourceSlot];
+	const auto SourceItem = Items[InSourceSlot];
 
 	return InDestinationContainer->AddItem(SourceItem, InDestinationSlot);
 }
 
-bool UContainerInstanceComponent::TransferItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot)
+bool UContainerInstanceComponent::TransferItem_MP(UContainerInstanceAccessor* InAccessor, const int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, const int32 InDestinationSlot)
 {
 	InAccessor->Server_TransferItem(this, InSourceSlot, InDestinationContainer, InDestinationSlot);
 
@@ -121,7 +121,7 @@ int32 UContainerInstanceComponent::GetFirstAvailableSlot()
 	return -1;
 }
 
-bool UContainerInstanceComponent::IsSlotOccupied(int32 InSlot)
+bool UContainerInstanceComponent::IsSlotOccupied(const int32 InSlot)
 {
 	TArray<FItemInstance>& Items = this->Items;
 	return IsSlotInRange(InSlot) && !Items[InSlot].IsNullItem();

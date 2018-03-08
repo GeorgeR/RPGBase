@@ -46,8 +46,8 @@ public:
 
 	virtual FItemInstance Clone(int32 InStackSize);
 
-	void PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer);
-	void PostReplicatedAdd(const struct FItemInstanceArray& InArraySerializer);
+	void PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer) const;
+	void PostReplicatedAdd(const struct FItemInstanceArray& InArraySerializer) const;
 
 	bool operator==(const FItemInstance& InOther) const;
 

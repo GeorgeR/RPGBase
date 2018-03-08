@@ -1,13 +1,13 @@
 #include "Association.h"
 #include "Net/UnrealNetwork.h"
 
-void FAssociationMember::PreReplicatedRemove(const struct FAssociationMemberArray& InArraySerializer)
+void FAssociationMember::PreReplicatedRemove(const struct FAssociationMemberArray& InArraySerializer) const
 {
 	if (InArraySerializer.Owner != nullptr)
 		InArraySerializer.Owner->OnMemberRemoved.Broadcast(*this);
 }
 
-void FAssociationMember::PostReplicatedAdd(const struct FAssociationMemberArray& InArraySerializer)
+void FAssociationMember::PostReplicatedAdd(const struct FAssociationMemberArray& InArraySerializer) const
 {
 	if (InArraySerializer.Owner != nullptr)
 		InArraySerializer.Owner->OnMemberAdded.Broadcast(*this);
@@ -25,10 +25,10 @@ UAssociation::UAssociation()
 	Members.RegisterWithOwner(this);
 }
 
-UAssociation* UAssociation::Create(FName InAssociationName, APlayerState* InCreator, FName InCreatorRank, FText& OutMessage)
+UAssociation* UAssociation::Create(const FName InAssociationName, APlayerState* InCreator, const FName InCreatorRank, FText& OutMessage)
 {
 	// TODO: Check if Creator is already in association
-	UAssociation* Result = NewObject<UAssociation>(nullptr);
+	auto Result = NewObject<UAssociation>(nullptr);
 	
 	Result->Name = InAssociationName;
 	Result->AddMember(InCreator, InCreatorRank);
@@ -36,7 +36,7 @@ UAssociation* UAssociation::Create(FName InAssociationName, APlayerState* InCrea
 	return Result;
 }
 
-void UAssociation::Create_MP(UAssociationAccessor* InAccessor, FName InAssociationName, APlayerState* InCreator, FName InCreatorRank)
+void UAssociation::Create_MP(UAssociationAccessor* InAccessor, const FName InAssociationName, APlayerState* InCreator, const FName InCreatorRank)
 {
 	InAccessor->Server_Create(InAssociationName, InCreator, InCreatorRank);
 }
@@ -53,7 +53,7 @@ void UAssociation::Invite_MP(UAssociationAccessor* InAccessor, APlayerState* InI
 	InAccessor->Server_Invite(this, InInviter, InInvitee);
 }
 
-bool UAssociation::AddMember_Implementation(APlayerState* InPlayer, FName InRank /*= TEXT("")*/)
+bool UAssociation::AddMember_Implementation(APlayerState* InPlayer, const FName InRank /*= TEXT("")*/)
 {
 	if (IsMember(InPlayer))
 		return false;
@@ -69,7 +69,7 @@ bool UAssociation::AddMember_Implementation(APlayerState* InPlayer, FName InRank
 	return true;
 }
 
-void UAssociation::AddMember_MP(UAssociationAccessor* InAccessor, APlayerState* InPlayer, FName InRank /*= TEXT("")*/)
+void UAssociation::AddMember_MP(UAssociationAccessor* InAccessor, APlayerState* InPlayer, const FName InRank /*= TEXT("")*/)
 {
 	InAccessor->Server_AddMember(this, InPlayer, InRank);
 }
@@ -95,7 +95,7 @@ void UAssociation::RemoveMember_MP(UAssociationAccessor* InAccessor, APlayerStat
 	InAccessor->Server_RemoveMember(this, InDismisser, InMember);
 }
 
-bool UAssociation::ChangeMemberRank_Implementation(APlayerState* InChanger, APlayerState* InMember, FName InNewRank)
+bool UAssociation::ChangeMemberRank_Implementation(APlayerState* InChanger, APlayerState* InMember, const FName InNewRank)
 {
 	FAssociationMember Member;
 	if (!GetMemberForPlayer(InMember, Member))
@@ -108,7 +108,7 @@ bool UAssociation::ChangeMemberRank_Implementation(APlayerState* InChanger, APla
 	return true;
 }
 
-void UAssociation::ChangeMemberRank_MP(UAssociationAccessor* InAccessor, APlayerState* InChanger, APlayerState* InMember, FName InNewRank)
+void UAssociation::ChangeMemberRank_MP(UAssociationAccessor* InAccessor, APlayerState* InChanger, APlayerState* InMember, const FName InNewRank)
 {
 	InAccessor->Server_ChangeMemberRank(this, InChanger, InMember, InNewRank);
 }

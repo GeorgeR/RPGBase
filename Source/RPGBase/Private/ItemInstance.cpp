@@ -16,13 +16,13 @@ bool FItemInstance::IsNullItem()
 	return GetItemClass()->GetDefaultObject<UNullItem>() != nullptr;
 }
 
-int32 FItemInstance::AddToStack(int32 InAmount)
+int32 FItemInstance::AddToStack(const int32 InAmount)
 {
-	UItem* Item = GetItemClass()->GetDefaultObject<UItem>();
+	const auto Item = GetItemClass()->GetDefaultObject<UItem>();
 	check(Item);
 
-	int32 Remainder = FMath::Abs(Item->MaxStackSize - (StackSize + InAmount));
-	int32 Added = InAmount - Remainder;
+	const auto Remainder = FMath::Abs(Item->MaxStackSize - (StackSize + InAmount));
+	auto Added = InAmount - Remainder;
 	Added = FMath::Max(Added, 0); // Clamp to 0
 
 	StackSize += Added;
@@ -30,9 +30,9 @@ int32 FItemInstance::AddToStack(int32 InAmount)
 	return Added;
 }
 
-int32 FItemInstance::RemoveFromStack(int32 InAmount)
+int32 FItemInstance::RemoveFromStack(const int32 InAmount)
 {
-	int32 Removed = FMath::Min(StackSize, StackSize - InAmount);
+	auto Removed = FMath::Min(StackSize, StackSize - InAmount);
 	Removed = FMath::Max(Removed, 0); // Clamp to 0
 
 	StackSize -= Removed;
@@ -40,42 +40,42 @@ int32 FItemInstance::RemoveFromStack(int32 InAmount)
 	return Removed;
 }
 
-FItemInstance FItemInstance::SplitStack(int32 InAmount)
+FItemInstance FItemInstance::SplitStack(const int32 InAmount)
 {
-	UItem* Item = GetItemClass()->GetDefaultObject<UItem>();
+	const auto Item = GetItemClass()->GetDefaultObject<UItem>();
 	check(Item);
 
-	int32 Remainder = FMath::Abs(Item->MaxStackSize - (StackSize + InAmount));
+	const auto Remainder = FMath::Abs(Item->MaxStackSize - (StackSize + InAmount));
 
-	FItemInstance NewItem = Clone(Remainder);
+	auto NewItem = Clone(Remainder);
 	return NewItem;
 }
 
-FItemInstance FItemInstance::Clone(int32 InStackSize)
+FItemInstance FItemInstance::Clone(const int32 InStackSize)
 {
-	FItemInstance Result(*this);
+	auto Result(*this);
 	Result.StackSize = InStackSize;
 	return Result;
 }
 
-void FItemInstance::PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer)
+void FItemInstance::PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer) const
 {
 	/* Note that as per the documentation, the order of items is different on the Client and Server.
 	It doesn't matter, the index of for client-side UI effects. */
 	if (InArraySerializer.Owner != nullptr)
 	{
-		int32 Index = InArraySerializer.Items.IndexOfByKey(*this);
+		const auto Index = InArraySerializer.Items.IndexOfByKey(*this);
 		InArraySerializer.Owner->OnItemRemoved.Broadcast(*this, Index);
 	}
 }
 
-void FItemInstance::PostReplicatedAdd(const struct FItemInstanceArray& InArraySerializer)
+void FItemInstance::PostReplicatedAdd(const struct FItemInstanceArray& InArraySerializer) const
 {
 	/* Note that as per the documentation, the order of items is different on the Client and Server. 
 	It doesn't matter, the index of for client-side UI effects. */
 	if (InArraySerializer.Owner != nullptr)
 	{
-		int32 Index = InArraySerializer.Items.IndexOfByKey(*this);
+		const auto Index = InArraySerializer.Items.IndexOfByKey(*this);
 		InArraySerializer.Owner->OnItemAdded.Broadcast(*this, Index);
 	}
 }
@@ -92,4 +92,4 @@ TSubclassOf<UItem> FItemInstance::GetItemClass()
 	return ItemClass;
 }
 
-void FItemInstanceArray::RegisterWithOwner(class UContainerInstanceComponent* InOwner){ Owner = InOwner; }
+void FItemInstanceArray::RegisterWithOwner(class UContainerInstanceComponent* InOwner) { Owner = InOwner; }

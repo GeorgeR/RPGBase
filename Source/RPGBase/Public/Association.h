@@ -26,8 +26,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	FDateTime MemberSince;
 
-	void PreReplicatedRemove(const struct FAssociationMemberArray& InArraySerializer);
-	void PostReplicatedAdd(const struct FAssociationMemberArray& InArraySerializer);
+	void PreReplicatedRemove(const struct FAssociationMemberArray& InArraySerializer) const;
+	void PostReplicatedAdd(const struct FAssociationMemberArray& InArraySerializer) const;
 };
 
 USTRUCT(BlueprintType)

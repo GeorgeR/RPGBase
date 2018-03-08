@@ -5,7 +5,7 @@ bool UAssociationAccessor::Server_Create_Validate(FName InAssociationName, APlay
 void UAssociationAccessor::Server_Create_Implementation(FName InAssociationName, APlayerState* InCreator, FName InCreatorRank) 
 { 
 	FText Message;
-	UAssociation* NewAssociation = UAssociation::Create(InAssociationName, InCreator, InCreatorRank, Message);
+	const auto NewAssociation = UAssociation::Create(InAssociationName, InCreator, InCreatorRank, Message);
 	if (NewAssociation != nullptr)
 		OnCreated.Broadcast(NewAssociation, Message);
 }
