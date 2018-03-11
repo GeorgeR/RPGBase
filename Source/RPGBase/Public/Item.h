@@ -18,8 +18,12 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	FName Name;
 
+	/* Localizable name */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	FName Description;
+	FText DisplayName;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	FText Description;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	UTexture2D* Icon;

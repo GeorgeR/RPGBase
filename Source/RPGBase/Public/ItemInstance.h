@@ -46,6 +46,10 @@ public:
 
 	virtual FItemInstance Clone(int32 InStackSize);
 
+	class UItem* LoadDefaultItem();
+
+	static FIntPoint GetIndex2D(int32 InColumnCount, int32 InSlot);
+
 	void PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer) const;
 	void PostReplicatedAdd(const struct FItemInstanceArray& InArraySerializer) const;
 

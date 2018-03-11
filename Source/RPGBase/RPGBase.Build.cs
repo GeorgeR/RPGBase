@@ -31,7 +31,8 @@ public class RPGBase : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore"
+				"SlateCore",
+                "UMG"
 			});
 
 		DynamicallyLoadedModuleNames.AddRange(new string[] { });

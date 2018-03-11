@@ -15,16 +15,15 @@ class RPGBASE_API UContainerInstanceComponent
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, const FItemInstance&, InItem, int32, InSlot);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemoved, const FItemInstance&, InItem, int32, InSlot);
-
 public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	UContainer* Container;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, const FItemInstance&, InItem, int32, InSlot);
 	UPROPERTY(BlueprintAssignable)
 	FOnItemAdded OnItemAdded;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemoved, const FItemInstance&, InItem, int32, InSlot);
 	UPROPERTY(BlueprintAssignable)
 	FOnItemRemoved OnItemRemoved;
 

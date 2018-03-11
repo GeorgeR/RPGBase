@@ -58,6 +58,19 @@ FItemInstance FItemInstance::Clone(const int32 InStackSize)
 	return Result;
 }
 
+UItem* FItemInstance::LoadDefaultItem()
+{
+	return GetItemClass().GetDefaultObject();
+}
+
+FIntPoint FItemInstance::GetIndex2D(const int32 InColumnCount, const int32 InSlot)
+{
+	FIntPoint Result;
+	Result.X = InSlot % InColumnCount;
+	Result.Y = InSlot / InColumnCount;
+	return Result;
+}
+
 void FItemInstance::PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer) const
 {
 	/* Note that as per the documentation, the order of items is different on the Client and Server.
