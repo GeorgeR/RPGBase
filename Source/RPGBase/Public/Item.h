@@ -53,6 +53,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Item")
 	static bool IsNullItem(FItemInstance& InItemInstance) { return InItemInstance.IsNullItem(); }
+
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Item")
+	static UItem* GetInstanceItem(FItemInstance& InItemInstance) { return InItemInstance.GetItem(); }
 #pragma endregion ItemInstance Functions
 };
 

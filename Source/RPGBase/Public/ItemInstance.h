@@ -8,6 +8,7 @@
 
 /* An instance of an item that shows in an inventory/container, etc. */
 /* Why? More lightweight than instancing the full object everywhere. */
+/* Ownership: The item isn't owned, it's container is */
 USTRUCT(BlueprintType)
 struct RPGBASE_API FItemInstance
 	: public FFastArraySerializerItem
@@ -15,16 +16,16 @@ struct RPGBASE_API FItemInstance
 	GENERATED_BODY()
 
 public:
-	FItemInstance() { }
+	FItemInstance() = default;
 	FItemInstance(const FItemInstance& InSource);
-	virtual ~FItemInstance() { }
+	virtual ~FItemInstance() = default;
 
 	/* Unique Id of the instance */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	FName Id;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	FSoftClassPath Item;
+	FSoftClassPath ItemClass;
 
 	/* Id of the owning container, ie. an inventory or the world. */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
@@ -33,6 +34,8 @@ public:
 	/* Current stack size, limited by Item's MaxStackSize */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	int32 StackSize;
+
+	class UItem* GetItem();
 
 	bool IsNullItem();
 
@@ -46,8 +49,6 @@ public:
 
 	virtual FItemInstance Clone(int32 InStackSize);
 
-	class UItem* LoadDefaultItem();
-
 	static FIntPoint GetIndex2D(int32 InColumnCount, int32 InSlot);
 
 	void PreReplicatedRemove(const struct FItemInstanceArray& InArraySerializer) const;
@@ -56,10 +57,8 @@ public:
 	bool operator==(const FItemInstance& InOther) const;
 
 private:
-	UPROPERTY()
-	TSubclassOf<class UItem> ItemClass;
-
-	TSubclassOf<class UItem> GetItemClass();
+	UPROPERTY(Transient)
+	class UItem* CachedItem;
 };
 
 /* Remember to call MarkArrayDirty if an item is removed,

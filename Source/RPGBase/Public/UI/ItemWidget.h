@@ -28,6 +28,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	int32 StackSize;
 
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	bool bIsStackable;
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Context")
 	FItemInstance& GetContext() { return Context; }
 

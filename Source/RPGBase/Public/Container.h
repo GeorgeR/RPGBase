@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
 #include "Item.h"
 
 #include "Container.generated.h"
@@ -25,8 +24,8 @@ public:
 	int32 RowCount = 4;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Container")
-	const int32 GetCapacity() const { return ColumnCount * RowCount; }
+	int32 GetCapacity() const { return ColumnCount * RowCount; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Container")
-	FORCEINLINE bool IsSlotInRange(int32 InSlot) { return InSlot >= 0 && InSlot < GetCapacity(); }
+	FORCEINLINE bool IsSlotInRange(const int32 InSlot) const { return InSlot >= 0 && InSlot < GetCapacity(); }
 };

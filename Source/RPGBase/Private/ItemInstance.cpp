@@ -4,8 +4,10 @@
 
 FItemInstance::FItemInstance(const FItemInstance& InSource)
 {
+	CachedItem = nullptr;
+
 	Id = InSource.Id; // TODO: Id should be new
-	Item = InSource.Item;
+	ItemClass = InSource.ItemClass;
 	ContainerId = InSource.ContainerId;
 	StackSize = InSource.StackSize;
 	ItemClass = InSource.ItemClass;
@@ -13,12 +15,12 @@ FItemInstance::FItemInstance(const FItemInstance& InSource)
 
 bool FItemInstance::IsNullItem()
 {
-	return GetItemClass()->GetDefaultObject<UNullItem>() != nullptr;
+	return GetItem()->GetClass() == UNullItem::StaticClass();
 }
 
 int32 FItemInstance::AddToStack(const int32 InAmount)
 {
-	const auto Item = GetItemClass()->GetDefaultObject<UItem>();
+	const auto Item = GetItem();
 	check(Item);
 
 	const auto Remainder = FMath::Abs(Item->MaxStackSize - (StackSize + InAmount));
@@ -42,7 +44,7 @@ int32 FItemInstance::RemoveFromStack(const int32 InAmount)
 
 FItemInstance FItemInstance::SplitStack(const int32 InAmount)
 {
-	const auto Item = GetItemClass()->GetDefaultObject<UItem>();
+	const auto Item = GetItem();
 	check(Item);
 
 	const auto Remainder = FMath::Abs(Item->MaxStackSize - (StackSize + InAmount));
@@ -56,11 +58,6 @@ FItemInstance FItemInstance::Clone(const int32 InStackSize)
 	auto Result(*this);
 	Result.StackSize = InStackSize;
 	return Result;
-}
-
-UItem* FItemInstance::LoadDefaultItem()
-{
-	return GetItemClass().GetDefaultObject();
 }
 
 FIntPoint FItemInstance::GetIndex2D(const int32 InColumnCount, const int32 InSlot)
@@ -95,14 +92,19 @@ void FItemInstance::PostReplicatedAdd(const struct FItemInstanceArray& InArraySe
 
 bool FItemInstance::operator==(const FItemInstance& InOther) const { return Id == InOther.Id; }
 
-TSubclassOf<UItem> FItemInstance::GetItemClass()
+UItem* FItemInstance::GetItem()
 {
-	if (ItemClass == nullptr)
-		ItemClass = Item.TryLoadClass<UItem>();
+	if (!ItemClass.IsValid())
+		return nullptr;
 
-	check(ItemClass);
+	if(CachedItem == nullptr)
+	{
+		const auto Class = ItemClass.TryLoadClass<UItem>();
+		if (Class != nullptr)
+			CachedItem = Cast<UItem>(Class->GetDefaultObject());
+	}
 
-	return ItemClass;
+	return CachedItem;
 }
 
 void FItemInstanceArray::RegisterWithOwner(class UContainerInstanceComponent* InOwner) { Owner = InOwner; }

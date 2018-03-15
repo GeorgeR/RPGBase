@@ -16,8 +16,16 @@ class RPGBASE_API UContainerInstanceComponent
 	GENERATED_BODY()
 
 public:
+	/* Unique Id of the instance */
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Replicated)
+	FName Id;
+
+	/* Set this via SetContainerClass, don't set this directly! */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	UContainer* Container;
+	FSoftClassPath ContainerClass;
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Replicated)
+	FName OwnerId;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, const FItemInstance&, InItem, int32, InSlot);
 	UPROPERTY(BlueprintAssignable)
@@ -30,7 +38,14 @@ public:
 	UContainerInstanceComponent();
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Container")
-	const int32 GetCapacity() const { return Container->GetCapacity(); }
+	int32 GetCapacity() { return GetContainer()->GetCapacity(); }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Container")
+	void SetContainerClass(FSoftClassPath& InContainerClass);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
+	bool CanAddItem(const FItemInstance& InItem, int32 InSlot = -1);
+	virtual bool CanAddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
 
 	/* Adds an item to the container, returns true if it was added. InSlot == -1 means add it to the first available slot. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
@@ -67,16 +82,22 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, Replicated)
-	FItemInstanceArray Items;
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FItemInstance> Items;
 
 	/* Returns first available slot index, -1 if none available. */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	int32 GetFirstAvailableSlot();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Container")
-	FORCEINLINE bool IsSlotInRange(int32 InSlot) { return Container->IsSlotInRange(InSlot); }
+	FORCEINLINE bool IsSlotInRange(int32 InSlot) { return GetContainer()->IsSlotInRange(InSlot); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Container")
 	bool IsSlotOccupied(int32 InSlot);
+	
+private:
+	UPROPERTY(Transient)
+	class UContainer* CachedContainer;
+
+	const class UContainer* GetContainer();
 };

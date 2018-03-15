@@ -4,25 +4,33 @@
 
 UContainerInstanceComponent::UContainerInstanceComponent()
 {
-	if (Container != nullptr)
-	{
-		TArray<FItemInstance>& Items = this->Items;
-		Items.Init(UNullItem::GetInstance(), GetCapacity());
-	}
+	CachedContainer = nullptr;
 
-	this->Items.RegisterWithOwner(this);
+	if (ContainerClass.IsValid())
+		SetContainerClass(ContainerClass);
+}
+
+void UContainerInstanceComponent::SetContainerClass(FSoftClassPath& InContainerClass)
+{
+	ContainerClass = InContainerClass;
+
+	Items.Init(UNullItem::GetInstance(), GetCapacity());
+}
+
+bool UContainerInstanceComponent::CanAddItem_Implementation(const FItemInstance& InItem, int32 InSlot)
+{
+	if (InSlot == -1)
+		InSlot = GetFirstAvailableSlot();
+
+	return !IsSlotOccupied(InSlot);
 }
 
 /* By default, this won't add the item if the slot is occupied. You might customize it to swap items with the source. */
 bool UContainerInstanceComponent::AddItem_Implementation(const FItemInstance& InItem, int32 InSlot)
 {
-	if (InSlot == -1)
-		InSlot = GetFirstAvailableSlot();
-
-	if (IsSlotOccupied(InSlot))
+	if (!CanAddItem(InItem, InSlot))
 		return false;
 
-	TArray<FItemInstance>& Items = this->Items;
 	Items[InSlot] = InItem;
 
 #if !(WITH_NETWORKING)
@@ -44,7 +52,6 @@ void UContainerInstanceComponent::RemoveItem_Implementation(const int32 InSlot)
 	if (!IsSlotOccupied(InSlot))
 		return;
 
-	TArray<FItemInstance>& Items = this->Items;
 	auto& Item = Items[InSlot];
 	Items.RemoveAt(InSlot, 1, false);
 	Items[InSlot] = UNullItem::GetInstance();
@@ -70,7 +77,6 @@ void UContainerInstanceComponent::SwapItems_Implementation(const int32 InSourceS
 	OnItemRemoved.Broadcast(Items[InDestinationSlot], InDestinationSlot);
 #endif
 
-	TArray<FItemInstance>& Items = this->Items;
 	Items.Swap(InSourceSlot, InDestinationSlot);
 
 #if !(WITH_NETWORKING)
@@ -89,7 +95,6 @@ bool UContainerInstanceComponent::TransferItem_Implementation(const int32 InSour
 	if (InDestinationContainer->IsSlotOccupied(InDestinationSlot) || !IsSlotOccupied(InSourceSlot))
 		return false;
 
-	TArray<FItemInstance>& Items = this->Items;
 	const auto SourceItem = Items[InSourceSlot];
 
 	return InDestinationContainer->AddItem(SourceItem, InDestinationSlot);
@@ -106,12 +111,12 @@ void UContainerInstanceComponent::GetLifetimeReplicatedProps(TArray<FLifetimePro
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UContainerInstanceComponent, Items);
+	DOREPLIFETIME(UContainerInstanceComponent, Id);
+	DOREPLIFETIME(UContainerInstanceComponent, OwnerId);
 }
 
 int32 UContainerInstanceComponent::GetFirstAvailableSlot()
 {
-	TArray<FItemInstance>& Items = this->Items;
 	for (auto i = 0; i < Items.Num(); i++)
 	{
 		if (Items[i].IsNullItem())
@@ -123,6 +128,20 @@ int32 UContainerInstanceComponent::GetFirstAvailableSlot()
 
 bool UContainerInstanceComponent::IsSlotOccupied(const int32 InSlot)
 {
-	TArray<FItemInstance>& Items = this->Items;
 	return IsSlotInRange(InSlot) && !Items[InSlot].IsNullItem();
+}
+
+const UContainer* UContainerInstanceComponent::GetContainer()
+{
+	if (!ContainerClass.IsValid())
+		return nullptr;
+
+	if(CachedContainer == nullptr)
+	{
+		const auto Class = ContainerClass.TryLoadClass<UContainer>();
+		if(Class != nullptr)
+			CachedContainer = Cast<UContainer>(Class->GetDefaultObject());
+	}
+
+	return CachedContainer;
 }

@@ -17,6 +17,6 @@ UNullItem* UNullItem::Get()
 FItemInstance& UNullItem::GetInstance()
 {
 	static FItemInstance Instance;
-	Instance.Item = FSoftClassPath(Get()->GetClass());
+	Instance.ItemClass = FSoftClassPath(Get()->GetClass());
 	return Instance;
 }
