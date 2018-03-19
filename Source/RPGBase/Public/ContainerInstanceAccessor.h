@@ -15,6 +15,9 @@ class RPGBASE_API UContainerInstanceAccessor
 private:
 	friend class UContainerInstanceComponent;
 
+	UPROPERTY()
+	TMap<int, float> LRUCache;
+
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_AddItem(UContainerInstanceComponent* InContext, const FItemInstance& InItem, int32 InSlot = -1);
 	virtual bool Server_AddItem_Validate(UContainerInstanceComponent* InContext, const FItemInstance& InItem, int32 InSlot = -1);
