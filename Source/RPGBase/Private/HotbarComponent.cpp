@@ -22,7 +22,7 @@ bool UHotbarComponent::CanUse_Implementation(int32 InSlot)
 	if (Usable == nullptr)
 		return false;
 
-	return Usable->CanUse(GetOwner());
+	return Usable->CanUse(GetOwner(), Items[InSlot]);
 }
 
 bool UHotbarComponent::Use_Implementation(int32 InSlot)
@@ -34,7 +34,7 @@ bool UHotbarComponent::Use_Implementation(int32 InSlot)
 	if (Usable == nullptr)
 		return false;
 
-	Usable->Use(GetOwner());
+	Usable->Use(GetOwner(), Items[InSlot]);
 
 	return true;
 }

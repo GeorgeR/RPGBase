@@ -2,28 +2,28 @@
 #include "ConsumableInterface.h"
 #include "EquippableInterface.h"
 
-bool IUsableInterface::CanUser_Implementation(AActor* InTargetUser)
+bool IUsableInterface::CanUse_Implementation(AActor* InTargetUser, FItemInstance& InInstance)
 {
 	auto Consumable = Cast<IConsumableInterface>(this);
 	if(Consumable)
-		return Consumable->CanConsume(InTargetUser);
+		return Consumable->CanConsume(InTargetUser, InInstance);
 	
 	auto Equippable = Cast<IEquippableInterface>(this);
 	if(Equippable)
-		return Equippable->CanEquip(InTargetUser);
+		return Equippable->CanEquip(InTargetUser, InInstance);
 	
 	return false;
 }
 
-void IUsableInterface::Use_Implementation(AActor* InTargetUser)
+void IUsableInterface::Use_Implementation(AActor* InTargetUser, FItemInstance& InInstance)
 {
 	auto Consumable = Cast<IConsumableInterface>(this);
 	if(Consumable)
-		if(Consumable->CanConsume(InTargetUser))
-			Consumable->Consume(InTargetUser);
+		if(Consumable->CanConsume(InTargetUser, InInstance))
+			Consumable->Consume(InTargetUser, InInstance);
 	
 	auto Equippable = Cast<IEquippableInterface>(this);
 	if(Equippable)
-		if(Equippable->CanEquip(InTargetUser))
-			Equippable->Equip(InTargetUser);
+		if(Equippable->CanEquip(InTargetUser, InInstance))
+			Equippable->Equip(InTargetUser, InInstance);
 }

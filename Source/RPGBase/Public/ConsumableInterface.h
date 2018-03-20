@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Interface.h"
+#include "ItemInstance.h"
 
 #include "ConsumableInterface.generated.h"
 
@@ -18,10 +19,10 @@ class RPGBASE_API IConsumableInterface
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Consumable")
-	bool CanConsume(AActor* InTargetConsumer);
-	virtual bool CanConsume_Implementation(AActor* InTargetConsumer) { return false; }
+	bool CanConsume(AActor* InTargetConsumer, FItemInstance& InInstance);
+	virtual bool CanConsume_Implementation(AActor* InTargetConsumer, FItemInstance& InInstance) { return false; }
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Consumable")
-	void Consume(AActor* InTargetConsumer);
-	virtual void Consume_Implementation(AActor* InTargetConsumer) { }
+	void Consume(AActor* InTargetConsumer, FItemInstance& InInstance);
+	virtual void Consume_Implementation(AActor* InTargetConsumer, FItemInstance& InInstance) { }
 };

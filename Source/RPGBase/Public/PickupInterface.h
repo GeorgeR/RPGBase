@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Interface.h"
+#include "ItemInstance.h"
 
 #include "PickupInterface.generated.h"
 
@@ -18,10 +19,10 @@ class RPGBASE_API IPickupInterface
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Pickup")
-	bool CanPickup(AActor* InPicker);
-	virtual bool CanPickup_Implementation(AActor* InPicker) { return false; }
+	bool CanPickup(AActor* InPicker, FItemInstance& InInstance);
+	virtual bool CanPickup_Implementation(AActor* InPicker, FItemInstance& InInstance) { return false; }
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Pickup")
-	void Pickup(AActor* InPicker);
-	virtual void Pickup_Implementation(AActor* InPicker) { }
+	void Pickup(AActor* InPicker, FItemInstance& InInstance);
+	virtual void Pickup_Implementation(AActor* InPicker, FItemInstance& InInstance) { }
 };

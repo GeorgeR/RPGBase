@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface.h"
+#include "ItemInstance.h"
 
 #include "UsableInterface.generated.h"
 
@@ -17,10 +19,10 @@ class RPGBASE_API IUsableInterface
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Usable")
-	bool CanUse(AActor* InTargetUser);
-	virtual bool CanUser_Implementation(AActor* InTargetUser);
+	bool CanUse(AActor* InTargetUser, FItemInstance& InInstance);
+	virtual bool CanUse_Implementation(AActor* InTargetUser, FItemInstance& InInstance);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Usable")
-	void Use(AActor* InTargetUser);
-	virtual void Use_Implementation(AActor* InTargetUser);
+	void Use(AActor* InTargetUser, FItemInstance& InInstance);
+	virtual void Use_Implementation(AActor* InTargetUser, FItemInstance& InInstance);
 };
