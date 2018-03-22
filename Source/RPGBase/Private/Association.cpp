@@ -36,7 +36,7 @@ UAssociation* UAssociation::Create(const FName InAssociationName, APlayerState* 
 	return Result;
 }
 
-void UAssociation::Create_MP(UAssociationAccessor* InAccessor, const FName InAssociationName, APlayerState* InCreator, const FName InCreatorRank)
+void UAssociation::Create_MP(UAssociationProxy* InAccessor, const FName InAssociationName, APlayerState* InCreator, const FName InCreatorRank)
 {
 	InAccessor->Server_Create(InAssociationName, InCreator, InCreatorRank);
 }
@@ -48,7 +48,7 @@ bool UAssociation::Invite_Implementation(APlayerState* InInviter, APlayerState* 
 	return true;
 }
 
-void UAssociation::Invite_MP(UAssociationAccessor* InAccessor, APlayerState* InInviter, APlayerState* InInvitee)
+void UAssociation::Invite_MP(UAssociationProxy* InAccessor, APlayerState* InInviter, APlayerState* InInvitee)
 {
 	InAccessor->Server_Invite(this, InInviter, InInvitee);
 }
@@ -69,7 +69,7 @@ bool UAssociation::AddMember_Implementation(APlayerState* InPlayer, const FName 
 	return true;
 }
 
-void UAssociation::AddMember_MP(UAssociationAccessor* InAccessor, APlayerState* InPlayer, const FName InRank /*= TEXT("")*/)
+void UAssociation::AddMember_MP(UAssociationProxy* InAccessor, APlayerState* InPlayer, const FName InRank /*= TEXT("")*/)
 {
 	InAccessor->Server_AddMember(this, InPlayer, InRank);
 }
@@ -90,7 +90,7 @@ bool UAssociation::RemoveMember_Implementation(APlayerState* InDismisser, APlaye
 	return false;
 }
 
-void UAssociation::RemoveMember_MP(UAssociationAccessor* InAccessor, APlayerState* InDismisser, APlayerState* InMember)
+void UAssociation::RemoveMember_MP(UAssociationProxy* InAccessor, APlayerState* InDismisser, APlayerState* InMember)
 {
 	InAccessor->Server_RemoveMember(this, InDismisser, InMember);
 }
@@ -108,7 +108,7 @@ bool UAssociation::ChangeMemberRank_Implementation(APlayerState* InChanger, APla
 	return true;
 }
 
-void UAssociation::ChangeMemberRank_MP(UAssociationAccessor* InAccessor, APlayerState* InChanger, APlayerState* InMember, const FName InNewRank)
+void UAssociation::ChangeMemberRank_MP(UAssociationProxy* InAccessor, APlayerState* InChanger, APlayerState* InMember, const FName InNewRank)
 {
 	InAccessor->Server_ChangeMemberRank(this, InChanger, InMember, InNewRank);
 }
@@ -123,7 +123,7 @@ bool UAssociation::Disband_Implementation(APlayerState* InDisbander)
 	return true;
 }
 
-void UAssociation::Disband_MP(UAssociationAccessor* InAccessor, APlayerState* InDisbander)
+void UAssociation::Disband_MP(UAssociationProxy* InAccessor, APlayerState* InDisbander)
 {
 	return InAccessor->Server_Disband(this, InDisbander);
 }

@@ -3,8 +3,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Container.h"
-#include "ContainerInstanceAccessor.h"
-#include "AssociationAccessor.h"
 
 #include "ContainerInstanceComponent.generated.h"
 
@@ -43,6 +41,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Container")
 	void SetContainerClass(FSoftClassPath& InContainerClass);
 
+	/* Usually return false if the container is full and you can't add to any stack. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
 	bool CanAddItem(const FItemInstance& InItem, int32 InSlot = -1);
 	virtual bool CanAddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
@@ -53,7 +52,7 @@ public:
 	virtual bool AddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "AddItem"))
-	bool AddItem_MP(UContainerInstanceAccessor* InAccessor, const FItemInstance& InItem, int32 InSlot = -1);
+	bool AddItem_MP(APlayerController* InPlayer, const FItemInstance& InItem, int32 InSlot = -1);
 
 	/* Removes an the item at the specified slot, returns the item that was removed. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
@@ -61,7 +60,7 @@ public:
 	virtual void RemoveItem_Implementation(int32 InSlot);
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "RemoveItem"))
-	void RemoveItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSlot);
+	void RemoveItem_MP(APlayerController* InPlayer, int32 InSlot);
 
 	/* Swaps items between the specified slots. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
@@ -69,7 +68,7 @@ public:
 	virtual void SwapItems_Implementation(int32 InSourceSlot, int32 InDestinationSlot);
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "SwapItem"))
-	void SwapItems_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, int32 InDestinationSlot);
+	void SwapItems_MP(APlayerController* InPlayer, int32 InSourceSlot, int32 InDestinationSlot);
 
 	/* Transfer an item between containers. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
@@ -77,9 +76,12 @@ public:
 	virtual bool TransferItem_Implementation(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "TransferItem"))
-	bool TransferItem_MP(UContainerInstanceAccessor* InAccessor, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+	bool TransferItem_MP(APlayerController* InPlayer, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
+	static class UContainerInstanceProxyComponent* CreateProxy(UContainerInstanceComponent* InContainerInstance);
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -96,6 +98,8 @@ protected:
 	bool IsSlotOccupied(int32 InSlot);
 	
 private:
+	friend class UContainerInstanceProxyComponent;
+
 	UPROPERTY(Transient)
 	class UContainer* CachedContainer;
 

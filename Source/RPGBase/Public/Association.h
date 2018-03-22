@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "AssociationAccessor.h"
+#include "AssociationProxy.h"
 #include "Engine/NetSerialization.h"
 #include "GameFramework/PlayerState.h"
 
@@ -68,7 +68,7 @@ struct TStructOpsTypeTraits<FAssociationMemberArray>
 
 UCLASS(BlueprintType, Blueprintable)
 class RPGBASE_API UAssociation 
-	: public UAssociationAccessor
+	: public UAssociationProxy
 {
 	GENERATED_BODY()
 
@@ -122,7 +122,7 @@ public:
 	static UAssociation* Create(FName InAssociationName, APlayerState* InCreator, FName InCreatorRank, FText& OutMessage);
 
 	UFUNCTION(BlueprintCallable, Category = "Association", meta = (DisplayName = "Create"))
-	static void Create_MP(UAssociationAccessor* InAccessor, FName InAssociationName, APlayerState* InCreator, FName InCreatorRank);
+	static void Create_MP(UAssociationProxy* InAccessor, FName InAssociationName, APlayerState* InCreator, FName InCreatorRank);
 
 	/* Returns false if the Inviter can't invite, or the Invitee is already in an Association. Optional localized message. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Association")
@@ -130,21 +130,21 @@ public:
 	virtual bool Invite_Implementation(APlayerState* InInviter, APlayerState* InInvitee, FText& OutMessage);
 
 	UFUNCTION(BlueprintCallable, Category = "Association", meta = (DisplayName = "Invite"))
-	void Invite_MP(UAssociationAccessor* InAccessor, APlayerState* InInviter, APlayerState* InInvitee);
+	void Invite_MP(UAssociationProxy* InAccessor, APlayerState* InInviter, APlayerState* InInvitee);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Association")
 	bool AddMember(APlayerState* InPlayer, FName InRank = TEXT(""));
 	virtual bool AddMember_Implementation(APlayerState* InPlayer, FName InRank = TEXT(""));
 
 	UFUNCTION(BlueprintCallable, Category = "Association", meta = (DisplayName = "AddMember"))
-	void AddMember_MP(UAssociationAccessor* InAccessor, APlayerState* InPlayer, FName InRank = TEXT(""));
+	void AddMember_MP(UAssociationProxy* InAccessor, APlayerState* InPlayer, FName InRank = TEXT(""));
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Association")
 	bool RemoveMember(APlayerState* InDismisser, APlayerState* InMember);
 	virtual bool RemoveMember_Implementation(APlayerState* InDismisser, APlayerState* InMember);
 
 	UFUNCTION(BlueprintCallable, Category = "Association", meta = (DisplayName = "RemoveMember"))
-	void RemoveMember_MP(UAssociationAccessor* InAccessor, APlayerState* InDismisser, APlayerState* InMember);
+	void RemoveMember_MP(UAssociationProxy* InAccessor, APlayerState* InDismisser, APlayerState* InMember);
 
 	/* Returns true if the Members rank was changed, false if the Changer didn't have permission. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Association")
@@ -152,14 +152,14 @@ public:
 	virtual bool ChangeMemberRank_Implementation(APlayerState* InChanger, APlayerState* InMember, FName InNewRank);
 
 	UFUNCTION(BlueprintCallable, Category = "Association", meta = (DisplayName = "ChangeMemberRank"))
-	void ChangeMemberRank_MP(UAssociationAccessor* InAccessor, APlayerState* InChanger, APlayerState* InMember, FName InNewRank);
+	void ChangeMemberRank_MP(UAssociationProxy* InAccessor, APlayerState* InChanger, APlayerState* InMember, FName InNewRank);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Association")
 	bool Disband(APlayerState* InDisbander);
 	virtual bool Disband_Implementation(APlayerState* InDisbander);
 
 	UFUNCTION(BlueprintCallable, Category = "Association", meta = (DisplayName = "Disband"))
-	void Disband_MP(UAssociationAccessor* InAccessor, APlayerState* InDisbander);
+	void Disband_MP(UAssociationProxy* InAccessor, APlayerState* InDisbander);
 
 	UFUNCTION(BlueprintCallable, Category = "Association")
 	bool IsMember(APlayerState* InPlayer);

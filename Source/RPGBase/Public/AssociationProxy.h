@@ -3,11 +3,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 
-#include "AssociationAccessor.generated.h"
+#include "AssociationProxy.generated.h"
 
 /* Wrapper to call RPC's for a Container via a PlayerController */
 UCLASS(BlueprintType)
-class RPGBASE_API UAssociationAccessor
+class RPGBASE_API UAssociationProxy
 	: public UObject 
 {
 	GENERATED_BODY()

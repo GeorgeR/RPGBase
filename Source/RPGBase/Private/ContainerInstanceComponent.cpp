@@ -1,4 +1,5 @@
 #include "ContainerInstanceComponent.h"
+#include "ContainerInstanceProxyComponent.h"
 #include "UnrealNetwork.h"
 #include "GameFramework/Actor.h"
 
@@ -41,12 +42,6 @@ bool UContainerInstanceComponent::AddItem_Implementation(const FItemInstance& In
 	return true;
 }
 
-bool UContainerInstanceComponent::AddItem_MP(UContainerInstanceAccessor* InAccessor, const FItemInstance& InItem, const int32 InSlot /*= -1*/)
-{
-	InAccessor->Server_AddItem(this, InItem, InSlot);
-	return false;
-}
-
 void UContainerInstanceComponent::RemoveItem_Implementation(const int32 InSlot)
 {
 	if (!IsSlotOccupied(InSlot))
@@ -60,11 +55,6 @@ void UContainerInstanceComponent::RemoveItem_Implementation(const int32 InSlot)
 	// If networking is off, the fast array serializer isnt used so OnItemRemoved is never fired
 	OnItemRemoved.Broadcast(InItem, InSlot);
 #endif
-}
-
-void UContainerInstanceComponent::RemoveItem_MP(UContainerInstanceAccessor* InAccessor, const int32 InSlot)
-{
-	InAccessor->Server_RemoveItem(this, InSlot);
 }
 
 void UContainerInstanceComponent::SwapItems_Implementation(const int32 InSourceSlot, const int32 InDestinationSlot)
@@ -85,11 +75,6 @@ void UContainerInstanceComponent::SwapItems_Implementation(const int32 InSourceS
 #endif
 }
 
-void UContainerInstanceComponent::SwapItems_MP(UContainerInstanceAccessor* InAccessor, const int32 InSourceSlot, const int32 InDestinationSlot)
-{
-	InAccessor->Server_SwapItems(this, InSourceSlot, InDestinationSlot);
-}
-
 bool UContainerInstanceComponent::TransferItem_Implementation(const int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, const int32 InDestinationSlot)
 {
 	if (InDestinationContainer->IsSlotOccupied(InDestinationSlot) || !IsSlotOccupied(InSourceSlot))
@@ -98,13 +83,6 @@ bool UContainerInstanceComponent::TransferItem_Implementation(const int32 InSour
 	const auto SourceItem = Items[InSourceSlot];
 
 	return InDestinationContainer->AddItem(SourceItem, InDestinationSlot);
-}
-
-bool UContainerInstanceComponent::TransferItem_MP(UContainerInstanceAccessor* InAccessor, const int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, const int32 InDestinationSlot)
-{
-	InAccessor->Server_TransferItem(this, InSourceSlot, InDestinationContainer, InDestinationSlot);
-
-	return false;
 }
 
 void UContainerInstanceComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
