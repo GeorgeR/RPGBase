@@ -23,7 +23,7 @@ public:
 	FName GetPlayerId() const;
 	virtual FName GetPlayerId_Implementation() const { return NAME_None; }
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Player")
-	FName GetPlayerName() const;
-	virtual FName GetPlayerName_Implementation() const { return NAME_None; }
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Player")
+	//FName GetPlayerName() const;
+	//virtual FName GetPlayerName_Implementation() const { return NAME_None; }
 };
