@@ -7,7 +7,7 @@ public class RPGBase : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-	    Definitions.Add("WITH_NETWORKING=1");
+	    PublicDefinitions.Add("WITH_NETWORKING=1");
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
