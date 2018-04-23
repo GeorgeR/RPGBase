@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Container.h"
+#include "Item.h"
+#include "ItemInstance.h"
 
 #include "ContainerInstanceComponent.generated.h"
 

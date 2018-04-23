@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
-#include "AssociationProxy.h"
 #include "Engine/NetSerialization.h"
-#include "GameFramework/PlayerState.h"
+#include "AssociationProxy.h"
 
 #include "Association.generated.h"
+
+class APlayerState;
 
 USTRUCT(BlueprintType, Blueprintable)
 struct FAssociationMember

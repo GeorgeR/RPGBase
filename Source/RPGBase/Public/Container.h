@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item.h"
 
 #include "Container.generated.h"
 
