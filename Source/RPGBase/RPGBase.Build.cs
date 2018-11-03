@@ -8,16 +8,19 @@ public class RPGBase : ModuleRules
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
 	    PublicDefinitions.Add("WITH_NETWORKING=1");
-		
-		PublicIncludePaths.AddRange(
-			new string[] {
-				"RPGBase/Public"
-			});
 
-		PrivateIncludePaths.AddRange(
-			new string[] {
-				"RPGBase/Private"
-			});
+	    if (Target.Version.MinorVersion <= 19)
+	    {
+            PublicIncludePaths.AddRange(
+			    new string[] {
+				    "RPGBase/Public"
+			    });
+
+		    PrivateIncludePaths.AddRange(
+			    new string[] {
+				    "RPGBase/Private"
+			    });
+        }
 
 		PublicDependencyModuleNames.AddRange(
 			new string[]
