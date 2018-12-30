@@ -35,8 +35,8 @@ public:
 	FItemInstance& GetContext() { return Context; }
 
 	UFUNCTION(BlueprintCallable, Category = "Context")
-	void SetContext(const FItemInstance& InContext);
+	void SetContext(UPARAM(DisplayName = "Context") const FItemInstance& InContext);
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	void SplitStack(int32 InAmount);
+	void SplitStack(int32 Amount);
 };

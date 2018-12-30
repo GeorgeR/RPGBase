@@ -5,8 +5,9 @@
 
 #include "ContainerFactory.generated.h"
 
-class UContainerInstanceComponent;
+class IContainerInstanceInterface;
 class UContainer;
+class UUniqueIdFactory;
 
 UCLASS(BlueprintType, Blueprintable)
 class RPGBASE_API UContainerFactory
@@ -15,13 +16,18 @@ class RPGBASE_API UContainerFactory
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Container")
+	UUniqueIdFactory* UniqueIdFactory;
+
+	UContainerFactory();
+	
 	/* Injects data into the provided instance (you create it first) */
-	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "Factory|Container")
-	bool CreateInstance(TSubclassOf<UContainer> InContainerClass, UContainerInstanceComponent* InOutInstance);
-	virtual bool CreateInstance_Implementation(TSubclassOf<UContainer> InContainerClass, UContainerInstanceComponent* InOutInstance);
+	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "RPG Base|Container")
+	bool CreateInstance(TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
+	virtual bool CreateInstance_Implementation(TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
 
 	/* Injects data into the provided instance (you create it first) */
-	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "Factory|Container")
-	bool LoadInstance(FName InId, UContainerInstanceComponent* InOutInstance);
-	virtual bool LoadInstance_Implementation(FName InId, UContainerInstanceComponent* InOutInstance) { return false; }
+	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "RPG Base|Container")
+	bool LoadInstance(const FString& Id, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
+	virtual bool LoadInstance_Implementation(const FString& Id, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
 };

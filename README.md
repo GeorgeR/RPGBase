@@ -24,20 +24,9 @@ An Association could be a Guild, Clan, etc. It contains Members with a Rank, and
 
 All of the functionality is checked on the server, and you should use the function with the accessor parameter if you're using multiplayer.
 
-# Consumeable
-A convenient interface for consumable items with a CanConsume and Consume function.
+# Items
 
-# Container
-A Container could be an inventory, chest or lootbox, etc. It should have a name, and how many columns and rows it has. If it simply has a capacity and you don't care about a grid size, make the column count 1, and row count as many items as you wish.
-
-A ContainerInstance is an actor component that you attached to an actor. It has a Container which holds information about its name and capacity as described above, and holds a list of items. You can Add and Remove an item, Swap (between two different slots) and transfer an item to a different container.
-
-All of this functionality is checked on the server, and you should use the function with the accessor parameter if you're using multiplayer.
-
-# Equippable
-A convenient interface for items you wish to be equippable/wearable. It has a CanEquip, Equip and UnEquip function. The equip target is a player and either named or indexed slot.
-
-# Item
+## Item
 An item has a Name, Description, Icon and MaxStackSize (if stackable at all). Item also contains functions for ItemInstance, as structs can't contain functions.
 
 An ItemInstance contains information about its Item class, container and stack size. You can Add and Remove from the stack, Split it and Clone it.
@@ -45,3 +34,31 @@ An ItemInstance contains information about its Item class, container and stack s
 An ItemInstanceActor is a base class for items that can be spawned in the world, such as a weapon.
 
 Item's don't yet contain network logic but they will.
+
+## Item.Usable
+An interface to describe any item that is usable. Probably applies to most items.
+```cpp
+bool CanUse(AActor* TargetUser, FItemInstance& Instance);
+void Use(AActor* TargetUser, FItemInstance& Instance);
+```
+
+## Item.Usable.Consumable
+An interface for a usable item to describe a consumable item (ie. food).
+```cpp
+bool CanConsume(AActor* TargetConsumer, FItemInstance& Instance);
+void Consume(AActor* TargetConsumer, FItemInstance& Instance);
+```
+
+## Item.Usable.Equippable
+An interface for a usable item you wish to be equippable/wearable. It has a CanEquip, Equip and UnEquip function. The equip target is a player and either named or indexed slot.
+```cpp
+bool CanEquip(AActor* TargetWearer, FItemInstance& Instance, FName? TargetSocket, int32? TargetSlot);
+void Equip(AActor* TargetWearer, FItemInstance& Instance, FName? TargetSocket, int32? TargetSlot);
+void UnEquip(AActor* Wearer, FItemInstance& Instance, FName? Socket, int32? Slot)
+```
+# Container
+A Container could be an inventory, chest or lootbox, etc. It should have a name, and how many columns and rows it has. If it simply has a capacity and you don't care about a grid size, make the column count 1, and row count as many items as you wish.
+
+A ContainerInstance is an actor component that you attached to an actor. It has a Container which holds information about its name and capacity as described above, and holds a list of items. You can Add and Remove an item, Swap (between two different slots) and transfer an item to a different container.
+
+All of this functionality is checked on the server, and you should use the function with the accessor parameter if you're using multiplayer.

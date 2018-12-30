@@ -5,6 +5,8 @@
 
 //#include "ProxySupport.generated.h"
 
+// NOTE: What the hell is this?
+
 class FProxy
 {
 public:
@@ -25,7 +27,7 @@ public:
 };
 
 template <typename TProxy, typename T>
-static TProxy* GetOrCreateProxy(TScriptInterface<IPlayerInterface> InPlayer, T* InContext)
+static TProxy* GetOrCreateProxy(TScriptInterface<IRPGPlayerInterface> InPlayer, T* InContext)
 {
 	auto Actor = Cast<AActor>(InPlayer.GetObject());
 	if (Actor == nullptr)
@@ -62,7 +64,7 @@ static TProxy* GetOrCreateProxy(TScriptInterface<IPlayerInterface> InPlayer, T* 
 
 /* Call when unsubscribing! */
 template <typename TProxy, typename T>
-static void ReleaseProxy(TScriptInterface<IPlayerInterface>& InPlayer, T* InContext)
+static void ReleaseProxy(TScriptInterface<IRPGPlayerInterface>& InPlayer, T* InContext)
 {
 	auto Actor = Cast<AActor>(InPlayer.GetObject());
 	if (Actor == nullptr)
@@ -87,7 +89,7 @@ static void ReleaseProxy(TScriptInterface<IPlayerInterface>& InPlayer, T* InCont
 }
 
 template <typename TProxy, typename T>
-static bool DoOnProxy(TScriptInterface<IPlayerInterface> InPlayer, T* InContext, TFunction<void(TProxy*)> InFunc)
+static bool DoOnProxy(TScriptInterface<IRPGPlayerInterface> InPlayer, T* InContext, TFunction<void(TProxy*)> InFunc)
 {
 	const auto Proxy = GetOrCreateProxy<TProxy, T>(InPlayer, InContext);
 	if (Proxy == nullptr)

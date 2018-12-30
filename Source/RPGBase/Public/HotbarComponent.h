@@ -24,11 +24,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Hotbar")
 	bool CanUse(int32 InSlot);
-	virtual bool CanUse_Implementation(int32 InSlot);
+	virtual bool CanUse_Implementation(int32 Slot);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Hotbar")
 	bool Use(int32 InSlot);
-	virtual bool Use_Implementation(int32 InSlot);
+	virtual bool Use_Implementation(int32 Slot);
 
 private:
 	APlayerController* GetOwner();

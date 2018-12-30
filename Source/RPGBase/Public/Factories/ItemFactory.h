@@ -6,6 +6,7 @@
 #include "ItemFactory.generated.h"
 
 class UItem;
+class UUniqueIdFactory;
 
 UCLASS(BlueprintType, Blueprintable)
 class RPGBASE_API UItemFactory
@@ -14,15 +15,21 @@ class RPGBASE_API UItemFactory
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "Factory|Item")
-	bool CreateInstance(TSubclassOf<UItem> InItemClass, int32 InCount, TArray<FItemInstance>& OutItemInstances);
-	virtual bool CreateInstance_Implementation(TSubclassOf<UItem> InItemClass, int32 InCount, TArray<FItemInstance>& OutItemInstance);
-	
-	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "Factory|Item", meta = (HidePin = "InWorldContextObject", DefaultToSelf = "InWorldContextObject"))
-	bool CreateActorFor(UObject* InWorldContextObject, FItemInstance& InItemInstance, AActor* OutActor);
-	virtual bool CreateActorFor_Implementation(UObject* InWorldContextObject, FItemInstance& InItemInstance, AActor* OutActor);
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Container")
+	UUniqueIdFactory* UniqueIdFactory;
 
-	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "Factory|Item")
-	bool LoadInstance(FName InId, FItemInstance& OutItemInstance);
-	virtual bool LoadInstance_Implementation(FName InId, FItemInstance& OutItemInstance) { return false; }
+	UItemFactory();
+
+	/* Returns one or more instances for the given item. Providing a greater count than the MaxStackSize will result in more instances. */
+	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "RPG Base|Item")
+	bool CreateInstance(TSubclassOf<UItem> ItemClass, int32 Count, TArray<FItemInstance>& ItemInstances);
+	virtual bool CreateInstance_Implementation(TSubclassOf<UItem> ItemClass, int32 Count, TArray<FItemInstance>& ItemInstance);
+	
+	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "RPG Base|Item", meta = (HidePin = "WorldContextObject", DefaultToSelf = "WorldContextObject"))
+	bool CreateActorFor(UObject* WorldContextObject, const FItemInstance& ItemInstance, AActor* Actor);
+	virtual bool CreateActorFor_Implementation(UObject* WorldContextObject, const FItemInstance& ItemInstance, AActor* Actor);
+
+	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "RPG Base|Item")
+	bool LoadInstance(const FString& Id, FItemInstance& ItemInstance);
+	virtual bool LoadInstance_Implementation(const FString& Id, FItemInstance& ItemInstance);
 };

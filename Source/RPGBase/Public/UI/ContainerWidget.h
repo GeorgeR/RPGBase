@@ -22,7 +22,7 @@ public:
 	UContainerInstanceComponent* GetContext() const { return Context; }
 
 	UFUNCTION(BlueprintCallable, Category = "Context")
-	void SetContext(UContainerInstanceComponent* InContext);
+	void SetContext(UPARAM(DisplayName = "Context") UContainerInstanceComponent* InContext);
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UPanelWidget* ItemsPanel;
@@ -32,8 +32,8 @@ public:
 
 private:
 	UFUNCTION()
-	void OnItemAdded(const FItemInstance& InItem, int32 InSlot) const;
+	void OnItemAdded(const FItemInstance& Item, UPARAM(DisplayName = "Slot") int32 InSlot) const;
 
 	UFUNCTION()
-	void OnItemRemoved(const FItemInstance& InItem, int32 InSlot) const;
+	void OnItemRemoved(const FItemInstance& Item, UPARAM(DisplayName = "Slot") int32 InSlot) const;
 };

@@ -15,7 +15,7 @@ void UContainerInstanceComponent::SetContainerClass(FSoftClassPath& InContainerC
 {
 	ContainerClass = InContainerClass;
 
-	Items.Init(UNullItem::GetInstance(), GetCapacity());
+	Items.Empty(GetCapacity());
 }
 
 bool UContainerInstanceComponent::CanAddItem_Implementation(const FItemInstance& InItem, int32 InSlot)
@@ -49,7 +49,8 @@ void UContainerInstanceComponent::RemoveItem_Implementation(const int32 InSlot)
 
 	auto& Item = Items[InSlot];
 	Items.RemoveAt(InSlot, 1, false);
-	Items[InSlot] = UNullItem::GetInstance();
+	// TODO
+	//Items[InSlot] = UNullItem::GetInstance();
 
 #if !(WITH_NETWORKING)
 	// If networking is off, the fast array serializer isnt used so OnItemRemoved is never fired
@@ -97,7 +98,7 @@ int32 UContainerInstanceComponent::GetFirstAvailableSlot()
 {
 	for (auto i = 0; i < Items.Num(); i++)
 	{
-		if (Items[i].IsNullItem())
+		if (!Items[i].IsValid())
 			return i;
 	}
 
@@ -106,7 +107,7 @@ int32 UContainerInstanceComponent::GetFirstAvailableSlot()
 
 bool UContainerInstanceComponent::IsSlotOccupied(const int32 InSlot)
 {
-	return IsSlotInRange(InSlot) && !Items[InSlot].IsNullItem();
+	return IsSlotInRange(InSlot) && Items[InSlot].IsValid();
 }
 
 const UContainer* UContainerInstanceComponent::GetContainer()

@@ -17,10 +17,10 @@ struct FAssociationMember
 public:
 	/* It's recommended you store the members by their FUniqueNetId */
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	FName PlayerId;
+	FString PlayerId;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	FName Rank;
+	FString Rank;
 
 	/* Stored as UTC */
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)

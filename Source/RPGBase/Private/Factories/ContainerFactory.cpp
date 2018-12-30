@@ -2,12 +2,29 @@
 
 #include "Container.h"
 #include "ContainerInstanceComponent.h"
+#include "ContainerInstanceInterface.h"
+#include "UniqueIdFactory.h"
 
-bool UContainerFactory::CreateInstance_Implementation(TSubclassOf<UContainer> InContainerClass,	UContainerInstanceComponent* InOutInstance)
+UContainerFactory::UContainerFactory()
 {
-	InOutInstance->ContainerClass = FSoftClassPath(InContainerClass);
+	UniqueIdFactory = CreateDefaultSubobject<UUniqueIdFactory>(TEXT("UniqueIdFactory"));
+}
 
-	// TODO: Set Id
+bool UContainerFactory::CreateInstance_Implementation(TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance)
+{
+	check(ContainerClass);
+	check(ContainerInstance);
+
+	ContainerInstance->Create(*ContainerClass, UniqueIdFactory->GetNewId(TEXT("ContainerInstance")));
+
+	return true;
+}
+
+bool UContainerFactory::LoadInstance_Implementation(const FString& Id, TScriptInterface<IContainerInstanceInterface>& ContainerInstance)
+{
+	check(ContainerInstance);
+
+	// TODO: Read from persistent store, write data to the instance
 
 	return true;
 }

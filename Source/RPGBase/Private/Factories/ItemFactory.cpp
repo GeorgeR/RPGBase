@@ -1,48 +1,61 @@
 #include "ItemFactory.h"
 #include "Item.h"
+#include "Engine/World.h"
+#include "UniqueIdFactory.h"
 
-bool UItemFactory::CreateInstance_Implementation(TSubclassOf<UItem> InItemClass, int32 InCount, TArray<FItemInstance>& OutItemInstances)
+UItemFactory::UItemFactory()
 {
-	check(InItemClass != nullptr);
-	if (InCount <= 0) return false;
+	UniqueIdFactory = CreateDefaultSubobject<UUniqueIdFactory>(TEXT("UniqueIdFactory"));
+}
 
-	OutItemInstances.Empty();
+bool UItemFactory::CreateInstance_Implementation(TSubclassOf<UItem> ItemClass, int32 Count, TArray<FItemInstance>& ItemInstances)
+{
+	check(ItemClass != nullptr);
+	if (Count <= 0) return false;
 
-	auto Item = Cast<UItem>(InItemClass->GetDefaultObject());
+	ItemInstances.Empty();
+
+	auto Item = Cast<UItem>(ItemClass->GetDefaultObject());
 	check(Item);
 
-	if(InCount == 1 || Item->bIsStackable)
+	if(Count == 1 || Item->bIsStackable)
 	{
 		FItemInstance Result;
-		// TODO: Set ItemInstance Id
-		Result.ItemClass = FSoftClassPath(InItemClass);
-		Result.StackSize = InCount;
-		OutItemInstances.Add(Result);
+		Result.Id = UniqueIdFactory->GetNewId(TEXT("ItemInstance"));
+		Result.ItemClass = FSoftClassPath(ItemClass);
+		Result.StackSize = Count;
+		ItemInstances.Add(Result);
 		return true;
 	}
 
-	for(auto i = 0; i < InCount; i++)
+	for(auto i = 0; i < Count; i++)
 	{
 		FItemInstance Result;
-		// TODO: Set ItemInstance Id
-		Result.ItemClass = FSoftClassPath(InItemClass);
+		Result.Id = UniqueIdFactory->GetNewId(TEXT("ItemInstance"));
+		Result.ItemClass = FSoftClassPath(ItemClass);
 		Result.StackSize = 1;
-		OutItemInstances.Add(Result);
+		ItemInstances.Add(Result);
 	}
 
-	return OutItemInstances.Num() == InCount;
+	return ItemInstances.Num() == Count;
 }
 
-bool UItemFactory::CreateActorFor_Implementation(UObject* InWorldContextObject, FItemInstance& InItemInstance, AActor* OutActor)
+bool UItemFactory::CreateActorFor_Implementation(UObject* WorldContextObject, const FItemInstance& ItemInstance, AActor* Actor)
 {
-	check(InWorldContextObject);
-	check(InWorldContextObject->GetWorld());
-
-	auto World = InWorldContextObject->GetWorld();
+	check(WorldContextObject);
+	check(WorldContextObject->GetWorld());
+	
+	auto World = WorldContextObject->GetWorld();
 
 	AActor* Result = World->SpawnActor<AActor>();
-
-	OutActor = Result;
+	Actor = Result;
 
 	return Result != nullptr;
+}
+
+bool UItemFactory::LoadInstance_Implementation(const FString& Id, FItemInstance& ItemInstance)
+{
+	// TODO: Load from persistent store and write data to instance
+
+	return true;
 }

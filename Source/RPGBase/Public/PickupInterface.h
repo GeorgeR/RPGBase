@@ -19,10 +19,10 @@ class RPGBASE_API IPickupInterface
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Pickup")
-	bool CanPickup(AActor* InPicker, FItemInstance& InInstance);
-	virtual bool CanPickup_Implementation(AActor* InPicker, FItemInstance& InInstance) { return false; }
+	bool CanPickup(AActor* Picker, FItemInstance& ItemInstance);
+	virtual bool CanPickup_Implementation(AActor* Picker, FItemInstance& ItemInstance) = 0;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Pickup")
-	void Pickup(AActor* InPicker, FItemInstance& InInstance);
-	virtual void Pickup_Implementation(AActor* InPicker, FItemInstance& InInstance) { }
+	void Pickup(AActor* Picker, FItemInstance& ItemInstance);
+	virtual void Pickup_Implementation(AActor* Picker, FItemInstance& ItemInstance) = 0;
 };

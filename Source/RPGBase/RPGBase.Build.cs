@@ -7,7 +7,14 @@ public class RPGBase : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
+        /* Use networking */
 	    PublicDefinitions.Add("WITH_NETWORKING=1");
+
+        /* Use SpatialOS */
+        PublicDefinitions.Add("WITH_SPATIALOS=1");
+
+        /* Use Gameplay Abilities */
+        PublicDefinitions.Add("WITH_ABILITIES=1");
 
 	    if (Target.Version.MinorVersion <= 19)
 	    {
@@ -27,7 +34,7 @@ public class RPGBase : ModuleRules
 			{
 				"Core"
 			});
-
+        
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -38,6 +45,24 @@ public class RPGBase : ModuleRules
                 "UMG"
 			});
 
-		DynamicallyLoadedModuleNames.AddRange(new string[] { });
-	}
+        if (PublicDefinitions.Contains("WITH_NETWORKING=1"))
+        {
+
+        }
+
+        if (PublicDefinitions.Contains("WITH_NETWORKING=1")
+            && PublicDefinitions.Contains("WITH_SPATIALOS=1"))
+        {
+
+        }
+
+        if (PublicDefinitions.Contains("WITH_ABILITIES=1"))
+        {
+            //PublicDependencyModuleNames.AddRange(
+            //    new string[]
+            //    {
+            //        "GameplayAbilities"
+            //    });
+        }
+    }
 }

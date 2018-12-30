@@ -1,5 +1,7 @@
 #include "RPGBase.h"
 
+DEFINE_LOG_CATEGORY(LogRPGBase);
+
 #define LOCTEXT_NAMESPACE "FRPGBaseModule"
 
 void FRPGBaseModule::StartupModule() { }

@@ -59,8 +59,8 @@ bool UAssociation::AddMember_Implementation(APlayerState* InPlayer, const FName 
 		return false;
 
 	FAssociationMember NewMember;
-	NewMember.PlayerId = FName(*InPlayer->UniqueId->ToString());
-	NewMember.Rank = InRank;
+	NewMember.PlayerId = *InPlayer->UniqueId->ToString();
+	NewMember.Rank = InRank.ToString();
 	NewMember.MemberSince = FDateTime::UtcNow();
 
 	TArray<FAssociationMember>& Members = this->Members;
@@ -80,7 +80,7 @@ bool UAssociation::RemoveMember_Implementation(APlayerState* InDismisser, APlaye
 	TArray<FAssociationMember>& Members = this->Members;
 	for (auto i = 0; i < Members.Num(); i++)
 	{
-		if (Members[i].PlayerId == FName(*InMember->UniqueId->ToString()))
+		if (Members[i].PlayerId == *InMember->UniqueId->ToString())
 		{
 			Members.RemoveAt(i);
 			return true;
@@ -101,7 +101,7 @@ bool UAssociation::ChangeMemberRank_Implementation(APlayerState* InChanger, APla
 	if (!GetMemberForPlayer(InMember, Member))
 		return false;
 
-	Member.Rank = InNewRank;
+	Member.Rank = InNewRank.ToString();
 
 	OnChangedRank.Broadcast(Member, InNewRank);
 
@@ -138,7 +138,7 @@ bool UAssociation::GetMemberForPlayer(APlayerState* InPlayer, FAssociationMember
 {
 	TArray<FAssociationMember>& Members = this->Members;
 	for (auto& Member : Members)
-		if (Member.PlayerId == FName(*InPlayer->UniqueId->ToString()))
+		if (Member.PlayerId == *InPlayer->UniqueId->ToString())
 		{
 			OutMember = Member;
 			return true;
@@ -152,7 +152,7 @@ bool UAssociation::GetRankForPlayer(APlayerState* InPlayer, FName& OutRank)
 	FAssociationMember Member;
 	if (GetMemberForPlayer(InPlayer, Member))
 	{
-		OutRank = Member.Rank;
+		OutRank = FName(*Member.Rank);
 		return true;
 	}
 
