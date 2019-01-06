@@ -58,11 +58,13 @@ public class RPGBase : ModuleRules
 
         if (PublicDefinitions.Contains("WITH_ABILITIES=1"))
         {
-            //PublicDependencyModuleNames.AddRange(
-            //    new string[]
-            //    {
-            //        "GameplayAbilities"
-            //    });
+            PublicDependencyModuleNames.AddRange(
+                new string[]
+                {
+                    "GameplayAbilities",
+                    "GameplayTags",
+                    "GameplayTasks"
+                });
         }
     }
 }

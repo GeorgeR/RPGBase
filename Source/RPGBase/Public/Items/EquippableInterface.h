@@ -15,7 +15,6 @@ class UEquippableInterface
 };
 
 class RPGBASE_API IEquippableInterface
-	: public IUsableInterface
 {
 	GENERATED_BODY()
 

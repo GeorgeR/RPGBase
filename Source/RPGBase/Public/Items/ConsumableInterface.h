@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Interface.h"
 #include "ItemInstance.h"
+#include "UsableInterface.h"
 
 #include "ConsumableInterface.generated.h"
 

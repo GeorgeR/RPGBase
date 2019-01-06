@@ -10,7 +10,8 @@
 #include "ContainerInstanceInterface.generated.h"
 
 class UContainer;
-class IRPGPlayerInterface;
+class IRPGCharacterInterface;
+class IRPGOwnerInterface;
 
 UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
 class UContainerInstanceInterface
@@ -24,17 +25,20 @@ class RPGBASE_API IContainerInstanceInterface
 	GENERATED_BODY()
 
 public:
+#pragma region Setup
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual void Create(const TSoftClassPtr<UContainer>& ContainerClass, const FString& Id) = 0;
+	virtual void Create(const TSoftClassPtr<UContainer>& ContainerClass, const FString& Id, const TScriptInterface<IRPGOwnerInterface>& Owner) = 0;
 
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
+	virtual void SetContainerOwner(TScriptInterface<IRPGOwnerInterface>& Owner) = 0;
+#pragma endregion
+
+#pragma region Queries
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	virtual UContainer* GetContainer() = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual const TScriptInterface<IRPGPlayerInterface>& GetOwner(TScriptInterface<IRPGPlayerInterface>& Owner) const = 0;
-
-	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual void SetOwner(TScriptInterface<IRPGPlayerInterface>& Owner) = 0;
+	virtual const TScriptInterface<IRPGOwnerInterface>& GetContainerOwner(TScriptInterface<IRPGOwnerInterface>& Owner) const = 0;
 
 	/* Returns total capacity of the container (rows * columns) */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
@@ -55,7 +59,9 @@ public:
 	/* Is the specified slot occupied or empty? */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	virtual bool IsSlotOccupied(int32 Slot) const = 0;
+#pragma endregion Queries
 
+#pragma region Functions
 	/* Add an item */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	virtual bool AddItem(const FItemInstance& ItemInstance, int32 Slot = -1) = 0;
@@ -63,6 +69,10 @@ public:
 	/* Remove an item */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	virtual bool RemoveItem(int32 Slot) = 0;
+
+	/* Drops an item */
+	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
+	virtual bool DropItem(const FItemInstance& ItemInstance) = 0;
 
 	/* Swap item within the same container */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
@@ -75,4 +85,5 @@ public:
 	/* Transfer an item from this container to another */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	virtual bool TransferItem(int32 SourceSlot, TScriptInterface<IContainerInstanceInterface>& DestinationContainer, int32 DestinationSlot) = 0;
+#pragma endregion Functions
 };

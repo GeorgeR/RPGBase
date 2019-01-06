@@ -23,8 +23,8 @@ public:
 	
 	/* Injects data into the provided instance (you create it first) */
 	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "RPG Base|Container")
-	bool CreateInstance(TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
-	virtual bool CreateInstance_Implementation(TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
+	bool CreateInstance(const TScriptInterface<IRPGOwnerInterface>& Owner, TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
+	virtual bool CreateInstance_Implementation(const TScriptInterface<IRPGOwnerInterface>& Owner, TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance);
 
 	/* Injects data into the provided instance (you create it first) */
 	UFUNCTION(Blueprintcallable, BlueprintNativeEvent, Category = "RPG Base|Container")

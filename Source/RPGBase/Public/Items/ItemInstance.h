@@ -18,7 +18,7 @@ struct RPGBASE_API FItemInstance
 	GENERATED_BODY()
 
 public:
-	FItemInstance() : Id(TEXT("Invalid")) { }
+	FItemInstance();
 	FItemInstance(const FItemInstance& InSource);
 	virtual ~FItemInstance() = default;
 
@@ -42,6 +42,7 @@ public:
 	/* Returns the amount actually added to the stack (ie. if it was beyond capacity). You might customize this to add another item with the remaining amount. */
 	virtual int32 AddToStack(int32 Amount);
 
+	// TODO: If resulting stack size is 0, destroy the item
 	/* Returns amount actually removed. */
 	virtual int32 RemoveFromStack(int32 Amount);
 

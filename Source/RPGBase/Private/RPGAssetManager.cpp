@@ -1,4 +1,5 @@
 #include "RPGAssetManager.h"
+
 #include "RPGBase.h"
 #include "Engine/Engine.h"
 #include "LogMacros.h"

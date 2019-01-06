@@ -1,6 +1,6 @@
 #include "ContainerInstanceComponent.h"
 #include "ContainerInstanceProxyComponent.h"
-#include "PlayerInterface.h"
+#include "RPGPlayerInterface.h"
 
 bool UContainerInstanceComponent::AddItem_MP(APlayerController* InPlayer, const FItemInstance& InItem, const int32 InSlot /*= -1*/)
 {

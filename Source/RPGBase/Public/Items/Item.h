@@ -9,7 +9,7 @@
 #include "Item.generated.h"
 
 /* Base class for an item. Create a child blueprint to create a new item. */
-UCLASS(Abstract, BlueprintType)
+UCLASS(BlueprintType, Blueprintable)
 class RPGBASE_API UItem 
 	: public UPrimaryDataAsset
 {

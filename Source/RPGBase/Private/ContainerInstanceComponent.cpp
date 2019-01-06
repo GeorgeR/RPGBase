@@ -91,7 +91,7 @@ void UContainerInstanceComponent::GetLifetimeReplicatedProps(TArray<FLifetimePro
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UContainerInstanceComponent, Id);
-	DOREPLIFETIME(UContainerInstanceComponent, OwnerId);
+	DOREPLIFETIME(UContainerInstanceComponent, Owner);
 }
 
 int32 UContainerInstanceComponent::GetFirstAvailableSlot()

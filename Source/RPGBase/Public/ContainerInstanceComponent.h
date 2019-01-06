@@ -8,6 +8,8 @@
 
 #include "ContainerInstanceComponent.generated.h"
 
+class IRPGOwnerInterface;
+
 /* An actual instance of a container */
 UCLASS(BlueprintType)
 class RPGBASE_API UContainerInstanceComponent
@@ -25,8 +27,8 @@ public:
 	FSoftClassPath ContainerClass;
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Replicated)
-	FName OwnerId;
-
+	TScriptInterface<IRPGOwnerInterface> Owner;
+	
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, const FItemInstance&, InItem, int32, InSlot);
 	UPROPERTY(BlueprintAssignable)
 	FOnItemAdded OnItemAdded;

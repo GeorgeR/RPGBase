@@ -10,12 +10,12 @@ UContainerFactory::UContainerFactory()
 	UniqueIdFactory = CreateDefaultSubobject<UUniqueIdFactory>(TEXT("UniqueIdFactory"));
 }
 
-bool UContainerFactory::CreateInstance_Implementation(TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance)
+bool UContainerFactory::CreateInstance_Implementation(const TScriptInterface<IRPGOwnerInterface>& Owner, TSubclassOf<UContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance)
 {
 	check(ContainerClass);
 	check(ContainerInstance);
 
-	ContainerInstance->Create(*ContainerClass, UniqueIdFactory->GetNewId(TEXT("ContainerInstance")));
+	ContainerInstance->Create(*ContainerClass, UniqueIdFactory->GetNewId(TEXT("ContainerInstance")), Owner);
 
 	return true;
 }

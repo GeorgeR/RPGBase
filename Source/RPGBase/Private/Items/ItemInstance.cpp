@@ -2,6 +2,13 @@
 #include "Item.h"
 #include "ContainerInstanceComponent.h"
 
+FItemInstance::FItemInstance()
+	: Id(TEXT("Invalid")),
+	ItemClass(nullptr),
+	ContainerId(TEXT("")),
+	StackSize(0),
+	CachedItem(nullptr) { }
+
 FItemInstance::FItemInstance(const FItemInstance& Source)
 {
 	CachedItem = nullptr;
