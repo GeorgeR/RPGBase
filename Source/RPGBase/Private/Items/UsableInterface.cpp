@@ -4,7 +4,7 @@
 
 // TODO: Don't reference sub-interfaces here!!
 
-bool IUsableInterface::CanUse_Implementation(AActor* InTargetUser, FItemInstance& ItemInstance)
+bool IUsableInterface::CanUse_Implementation(AActor* InTargetUser, FRPGItemInstance& ItemInstance)
 {
 	auto Consumable = Cast<IConsumableInterface>(this);
 	if(Consumable)
@@ -17,7 +17,7 @@ bool IUsableInterface::CanUse_Implementation(AActor* InTargetUser, FItemInstance
 	return false;
 }
 
-void IUsableInterface::Use_Implementation(AActor* InTargetUser, FItemInstance& ItemInstance)
+void IUsableInterface::Use_Implementation(AActor* InTargetUser, FRPGItemInstance& ItemInstance)
 {
 	auto Consumable = Cast<IConsumableInterface>(this);
 	if(Consumable)

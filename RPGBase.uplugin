@@ -13,11 +13,22 @@
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"Installed": false,
-	"Modules": [
-		{
-			"Name": "RPGBase",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		}
-	]
+  "Modules": [
+    {
+      "Name": "RPGBase",
+      "Type": "Runtime",
+      "LoadingPhase": "PreDefault"
+    },
+    {
+      "Name": "RPGBaseEditor",
+      "Type": "Editor",
+      "LoadingPhase": "PostDefault"
+    }
+  ],
+  "Plugins": [
+      {
+        "Name": "GameplayAbilities",
+        "Enabled": true 
+      }
+  ]
 }

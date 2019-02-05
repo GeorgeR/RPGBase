@@ -5,11 +5,11 @@
 #include "ScriptInterface.h"
 #include "SoftObjectPtr.h"
 
-#include "ItemInstance.h"
+#include "RPGItemInstance.h"
 
 #include "ContainerInstanceInterface.generated.h"
 
-class UContainer;
+class URPGContainer;
 class IRPGCharacterInterface;
 class IRPGOwnerInterface;
 
@@ -27,7 +27,7 @@ class RPGBASE_API IContainerInstanceInterface
 public:
 #pragma region Setup
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual void Create(const TSoftClassPtr<UContainer>& ContainerClass, const FString& Id, const TScriptInterface<IRPGOwnerInterface>& Owner) = 0;
+	virtual void Create(const TSoftClassPtr<URPGContainer>& ContainerClass, const FString& Id, const TScriptInterface<IRPGOwnerInterface>& Owner) = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	virtual void SetContainerOwner(TScriptInterface<IRPGOwnerInterface>& Owner) = 0;
@@ -35,7 +35,7 @@ public:
 
 #pragma region Queries
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual UContainer* GetContainer() = 0;
+	virtual URPGContainer* GetContainer() = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
 	virtual const TScriptInterface<IRPGOwnerInterface>& GetContainerOwner(TScriptInterface<IRPGOwnerInterface>& Owner) const = 0;
@@ -46,11 +46,11 @@ public:
 
 	/* Usually return false if the container is full and you can't add to any stack. */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual bool CanAddItem(const FItemInstance& ItemInstance, int32 Slot = -1) = 0;
+	virtual bool CanAddItem(const FRPGItemInstance& ItemInstance, int32 Slot = -1) = 0;
 
 	/* Returns the first available empty slot or stack to add to */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "GetFirstAvailableSlot"))
-	virtual int32 GetFirstAvailableSlotForItem(const FItemInstance& ItemInstance) const = 0;
+	virtual int32 GetFirstAvailableSlotForItem(const FRPGItemInstance& ItemInstance) const = 0;
 
 	/* Returns the first available empty slot */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
@@ -64,7 +64,7 @@ public:
 #pragma region Functions
 	/* Add an item */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual bool AddItem(const FItemInstance& ItemInstance, int32 Slot = -1) = 0;
+	virtual bool AddItem(const FRPGItemInstance& ItemInstance, int32 Slot = -1) = 0;
 
 	/* Remove an item */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
@@ -72,7 +72,7 @@ public:
 
 	/* Drops an item */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual bool DropItem(const FItemInstance& ItemInstance) = 0;
+	virtual bool DropItem(const FRPGItemInstance& ItemInstance) = 0;
 
 	/* Swap item within the same container */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
@@ -80,7 +80,7 @@ public:
 
 	/* Splits and item stack by the specified count. The balance is returned. If the count is -1, the stack is split in half. */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual int32 SplitStack(FItemInstance& ItemInstance, int32 SplitCount = -1) = 0;
+	virtual int32 SplitStack(FRPGItemInstance& ItemInstance, int32 SplitCount = -1) = 0;
 
 	/* Transfer an item from this container to another */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")

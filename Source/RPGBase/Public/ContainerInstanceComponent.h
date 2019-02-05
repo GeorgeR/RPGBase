@@ -2,9 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Container.h"
-#include "Item.h"
-#include "ItemInstance.h"
+
+#include "RPGContainer.h"
+#include "RPGItem.h"
+#include "RPGItemInstance.h"
 
 #include "ContainerInstanceComponent.generated.h"
 
@@ -29,11 +30,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Replicated)
 	TScriptInterface<IRPGOwnerInterface> Owner;
 	
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, const FItemInstance&, InItem, int32, InSlot);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, const FRPGItemInstance&, InItem, int32, InSlot);
 	UPROPERTY(BlueprintAssignable)
 	FOnItemAdded OnItemAdded;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemoved, const FItemInstance&, InItem, int32, InSlot);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemoved, const FRPGItemInstance&, InItem, int32, InSlot);
 	UPROPERTY(BlueprintAssignable)
 	FOnItemRemoved OnItemRemoved;
 
@@ -47,16 +48,16 @@ public:
 
 	/* Usually return false if the container is full and you can't add to any stack. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
-	bool CanAddItem(const FItemInstance& InItem, int32 InSlot = -1);
-	virtual bool CanAddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
+	bool CanAddItem(const FRPGItemInstance& InItem, int32 InSlot = -1);
+	virtual bool CanAddItem_Implementation(const FRPGItemInstance& InItem, int32 InSlot = -1);
 
 	/* Adds an item to the container, returns true if it was added. InSlot == -1 means add it to the first available slot. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
-	bool AddItem(const FItemInstance& InItem, int32 InSlot = -1);
-	virtual bool AddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
+	bool AddItem(const FRPGItemInstance& InItem, int32 InSlot = -1);
+	virtual bool AddItem_Implementation(const FRPGItemInstance& InItem, int32 InSlot = -1);
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container", meta = (DisplayName = "AddItem"))
-	bool AddItem_MP(APlayerController* InPlayer, const FItemInstance& InItem, int32 InSlot = -1);
+	bool AddItem_MP(APlayerController* InPlayer, const FRPGItemInstance& InItem, int32 InSlot = -1);
 
 	/* Removes an the item at the specified slot, returns the item that was removed. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Container")
@@ -89,7 +90,7 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	TArray<FItemInstance> Items;
+	TArray<FRPGItemInstance> Items;
 
 	/* Returns first available slot index, -1 if none available. */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
@@ -105,7 +106,7 @@ private:
 	friend class UContainerInstanceProxyComponent;
 
 	UPROPERTY(Transient)
-	class UContainer* CachedContainer;
+	class URPGContainer* CachedContainer;
 
-	const class UContainer* GetContainer();
+	const class URPGContainer* GetContainer();
 };

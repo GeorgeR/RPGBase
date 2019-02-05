@@ -1,8 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ItemInstance.h"
 #include "Components/ActorComponent.h"
+
+#include "RPGItemInstance.h"
 #include "ProxySupport.h"
 #include "ContainerInstanceComponent.h"
 
@@ -29,19 +30,19 @@ private:
 	TArray<float> ItemTimestamps;
 	
 	UFUNCTION(Client, Reliable)
-	void Client_Page(float InTimeStamp, const TMap<int32, FItemInstance>& InPage);
-	virtual void Client_Page_Implementation(float InTimeStamp, const TMap<int32, FItemInstance>& InPage);
+	void Client_Page(float InTimeStamp, const TMap<int32, FRPGItemInstance>& InPage);
+	virtual void Client_Page_Implementation(float InTimeStamp, const TMap<int32, FRPGItemInstance>& InPage);
 
 	/* Client wants to add an item */
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_AddItem(const FItemInstance& InItem, int32 InSlot = -1);
-	virtual bool Server_AddItem_Validate(const FItemInstance& InItem, int32 InSlot = -1);
-	virtual void Server_AddItem_Implementation(const FItemInstance& InItem, int32 InSlot = -1);
+	void Server_AddItem(const FRPGItemInstance& InItem, int32 InSlot = -1);
+	virtual bool Server_AddItem_Validate(const FRPGItemInstance& InItem, int32 InSlot = -1);
+	virtual void Server_AddItem_Implementation(const FRPGItemInstance& InItem, int32 InSlot = -1);
 
 	/* Server says adding item is ok! */
 	UFUNCTION(Client, Reliable)
-	void Client_AddItem(float InTimeStamp, const FItemInstance& InItem, int32 InSlot = -1);
-	virtual void Client_AddItem_Implementation(float InTimeStamp, const FItemInstance& InItem, int32 InSlot = -1);
+	void Client_AddItem(float InTimeStamp, const FRPGItemInstance& InItem, int32 InSlot = -1);
+	virtual void Client_AddItem_Implementation(float InTimeStamp, const FRPGItemInstance& InItem, int32 InSlot = -1);
 
 	/* Client wants to remove an item */
 	UFUNCTION(Server, Reliable, WithValidation)
@@ -72,5 +73,5 @@ private:
 	virtual void Client_TransferItem_Implementation(float InTimeStamp, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
 
 	inline bool IsNewer(float InTimeStamp, int32 InSlot);
-	void SetItemIfNewer(float InTimeStamp, const FItemInstance& InItem, int32 InSlot);
+	void SetItemIfNewer(float InTimeStamp, const FRPGItemInstance& InItem, int32 InSlot);
 };

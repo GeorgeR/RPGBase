@@ -5,7 +5,7 @@
 
 #include "RPGAssetManager.generated.h"
 
-class UItem;
+class URPGItem;
 
 UCLASS()
 class RPGBASE_API URPGAssetManager
@@ -31,5 +31,5 @@ public:
 	 * @param PrimaryAssetId The asset identifier to load
 	 * @param bDisplayWarning If true, this will log a warning if the item failed to load
 	 */
-	UItem* ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning = true);
+	URPGItem* ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning = true);
 };

@@ -18,7 +18,7 @@ void UContainerInstanceComponent::SetContainerClass(FSoftClassPath& InContainerC
 	Items.Empty(GetCapacity());
 }
 
-bool UContainerInstanceComponent::CanAddItem_Implementation(const FItemInstance& InItem, int32 InSlot)
+bool UContainerInstanceComponent::CanAddItem_Implementation(const FRPGItemInstance& InItem, int32 InSlot)
 {
 	if (InSlot == -1)
 		InSlot = GetFirstAvailableSlot();
@@ -27,7 +27,7 @@ bool UContainerInstanceComponent::CanAddItem_Implementation(const FItemInstance&
 }
 
 /* By default, this won't add the item if the slot is occupied. You might customize it to swap items with the source. */
-bool UContainerInstanceComponent::AddItem_Implementation(const FItemInstance& InItem, int32 InSlot)
+bool UContainerInstanceComponent::AddItem_Implementation(const FRPGItemInstance& InItem, int32 InSlot)
 {
 	if (!CanAddItem(InItem, InSlot))
 		return false;
@@ -110,16 +110,16 @@ bool UContainerInstanceComponent::IsSlotOccupied(const int32 InSlot)
 	return IsSlotInRange(InSlot) && Items[InSlot].IsValid();
 }
 
-const UContainer* UContainerInstanceComponent::GetContainer()
+const URPGContainer* UContainerInstanceComponent::GetContainer()
 {
 	if (!ContainerClass.IsValid())
 		return nullptr;
 
 	if(CachedContainer == nullptr)
 	{
-		const auto Class = ContainerClass.TryLoadClass<UContainer>();
+		const auto Class = ContainerClass.TryLoadClass<URPGContainer>();
 		if(Class != nullptr)
-			CachedContainer = Cast<UContainer>(Class->GetDefaultObject());
+			CachedContainer = Cast<URPGContainer>(Class->GetDefaultObject());
 	}
 
 	return CachedContainer;

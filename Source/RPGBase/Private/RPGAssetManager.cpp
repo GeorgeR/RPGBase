@@ -1,9 +1,9 @@
 #include "RPGAssetManager.h"
-
-#include "RPGBase.h"
 #include "Engine/Engine.h"
 #include "LogMacros.h"
-#include "Item.h"
+
+#include "RPGBaseModule.h"
+#include "RPGItem.h"
 
 const FPrimaryAssetType URPGAssetManager::ConsumableItemType = TEXT("Consumable");
 const FPrimaryAssetType URPGAssetManager::EquippableItemType = TEXT("Equippable");
@@ -22,10 +22,10 @@ URPGAssetManager& URPGAssetManager::Get()
 	}
 }
 
-UItem* URPGAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning /*= true*/)
+URPGItem* URPGAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning /*= true*/)
 {
 	auto ItemPath = GetPrimaryAssetPath(PrimaryAssetId);
-	auto Item = Cast<UItem>(ItemPath.TryLoad());
+	auto Item = Cast<URPGItem>(ItemPath.TryLoad());
 	if (bLogWarning && Item == nullptr)
 		UE_LOG(LogRPGBase, Warning, TEXT("Failed to load item for id %s!"), *PrimaryAssetId.ToString());
 

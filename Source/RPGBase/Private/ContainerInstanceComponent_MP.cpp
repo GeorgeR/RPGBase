@@ -2,7 +2,7 @@
 #include "ContainerInstanceProxyComponent.h"
 #include "RPGPlayerInterface.h"
 
-bool UContainerInstanceComponent::AddItem_MP(APlayerController* InPlayer, const FItemInstance& InItem, const int32 InSlot /*= -1*/)
+bool UContainerInstanceComponent::AddItem_MP(APlayerController* InPlayer, const FRPGItemInstance& InItem, const int32 InSlot /*= -1*/)
 {
 	DoOnProxy<UContainerInstanceProxyComponent, UContainerInstanceComponent>(InPlayer, 
 		this, 

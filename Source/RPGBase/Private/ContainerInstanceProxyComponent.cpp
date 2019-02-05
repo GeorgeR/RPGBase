@@ -14,7 +14,7 @@ UContainerInstanceComponent* UContainerInstanceProxyComponent::GetContextAs() co
 	return Context;
 }
 
-void UContainerInstanceProxyComponent::Client_Page_Implementation(float InTimeStamp, const TMap<int32, FItemInstance>& InPage)
+void UContainerInstanceProxyComponent::Client_Page_Implementation(float InTimeStamp, const TMap<int32, FRPGItemInstance>& InPage)
 {
 	check(Context);
 
@@ -23,14 +23,14 @@ void UContainerInstanceProxyComponent::Client_Page_Implementation(float InTimeSt
 }
 
 // All these do is essentially ensure the wrapped calls are run on the server
-bool UContainerInstanceProxyComponent::Server_AddItem_Validate(const FItemInstance& InItem, int32 InSlot /*= -1*/) { return true; }
-void UContainerInstanceProxyComponent::Server_AddItem_Implementation(const FItemInstance& InItem, int32 InSlot /*= -1*/)
+bool UContainerInstanceProxyComponent::Server_AddItem_Validate(const FRPGItemInstance& InItem, int32 InSlot /*= -1*/) { return true; }
+void UContainerInstanceProxyComponent::Server_AddItem_Implementation(const FRPGItemInstance& InItem, int32 InSlot /*= -1*/)
 {
 	check(Context);
 	Context->AddItem(InItem, InSlot);
 }
 
-void UContainerInstanceProxyComponent::Client_AddItem_Implementation(float InTimeStamp, const FItemInstance& InItem, int32 InSlot)
+void UContainerInstanceProxyComponent::Client_AddItem_Implementation(float InTimeStamp, const FRPGItemInstance& InItem, int32 InSlot)
 {
 	check(Context);
 
@@ -92,7 +92,7 @@ bool UContainerInstanceProxyComponent::IsNewer(float InTimeStamp, int32 InSlot)
 	return bIsNewer;
 }
 
-void UContainerInstanceProxyComponent::SetItemIfNewer(float InTimeStamp, const FItemInstance& InItem, int32 InSlot)
+void UContainerInstanceProxyComponent::SetItemIfNewer(float InTimeStamp, const FRPGItemInstance& InItem, int32 InSlot)
 {
 	if (IsNewer(InTimeStamp, InSlot))
 	{
