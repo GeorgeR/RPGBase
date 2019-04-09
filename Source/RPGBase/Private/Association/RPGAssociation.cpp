@@ -94,7 +94,8 @@ bool URPGAssociation::RemoveMember_Implementation(const FRPGAssociationMember& D
 	// TODO: Check if on client, server (or single player)
 	if (IS_SERVER_OR_SINGLEPLAYER)
 	{
-		for (auto& Member_ : Members)
+		TArray<FRPGAssociationMember>& Members_ = Members;
+		for (auto& Member_ : Members_)
 		{
 			if (Member_.Player == Member.Player)
 			{
@@ -163,7 +164,8 @@ bool URPGAssociation::IsMember(const TScriptInterface<IRPGPlayerInterface>& Play
 
 bool URPGAssociation::GetMemberForPlayer(const TScriptInterface<IRPGPlayerInterface>& Player, FRPGAssociationMember& Member)
 {
-	for (auto& Member_ : Members)
+	TArray<FRPGAssociationMember>& Members_ = Members;
+	for (auto& Member_ : Members_)
 		if (Member_.Player == Player)
 		{
 			Member = Member_;

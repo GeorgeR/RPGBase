@@ -50,10 +50,18 @@ public class RPGBaseEditor : ModuleRules
 			{
                 "AppFramework",
                 "Projects",
-                "ShaderCore",
                 "Slate",
                 "SlateCore",
                 "WorkspaceMenuStructure",
 			});
+
+        if (Target.Version.MinorVersion <= 21)
+        {
+            PrivateDependencyModuleNames.AddRange(
+                new string[]
+                {
+                    "ShaderCore",
+                });
+        }
     }
 }
