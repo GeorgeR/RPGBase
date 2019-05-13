@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "RPGItemInstance.h"
+#include "Items/RPGItemInstance.h"
 
 #include "RPGItemFactory.generated.h"
 

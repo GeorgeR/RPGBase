@@ -1,4 +1,4 @@
-#include "RPGConsumableItem.h"
+#include "Items/RPGConsumableItem.h"
 
 URPGConsumableItem::URPGConsumableItem()
 {
@@ -6,12 +6,12 @@ URPGConsumableItem::URPGConsumableItem()
 	MaxStackSize = 10;
 }
 
-bool URPGConsumableItem::CanUse_Implementation(AActor* TargetUser, FRPGItemInstance& ItemInstance)
+bool URPGConsumableItem::CanUse_Implementation(const TScriptInterface<IRPGUserInterface>& TargetUser, FRPGItemInstance& ItemInstance)
 {
 	return CanConsume(TargetUser, ItemInstance);
 }
 
-void URPGConsumableItem::Use_Implementation(AActor* TargetUser, FRPGItemInstance& ItemInstance)
+void URPGConsumableItem::Use_Implementation(const TScriptInterface<IRPGUserInterface>& TargetUser, FRPGItemInstance& ItemInstance)
 {
 	if (CanConsume(TargetUser, ItemInstance))
 		Consume(TargetUser, ItemInstance);
@@ -23,14 +23,14 @@ void URPGConsumableItem::PostUse_Implementation(FRPGItemInstance& ItemInstance)
 }
 
 
-bool URPGConsumableItem::CanConsume_Implementation(AActor* TargetConsumer, FRPGItemInstance& ItemInstance)
+bool URPGConsumableItem::CanConsume_Implementation(const TScriptInterface<IRPGUserInterface>& TargetConsumer, FRPGItemInstance& ItemInstance)
 {
 	// TODO: More checks like if the TargetConsumer owns the item
 
 	return ItemInstance.StackSize > 0;
 }
 
-void URPGConsumableItem::Consume_Implementation(AActor* TargetConsumer, FRPGItemInstance& ItemInstance)
+void URPGConsumableItem::Consume_Implementation(const TScriptInterface<IRPGUserInterface>& TargetConsumer, FRPGItemInstance& ItemInstance)
 {
 	// TODO
 }

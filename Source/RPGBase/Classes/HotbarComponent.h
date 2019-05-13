@@ -1,15 +1,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ContainerInstanceComponent.h"
 #include "GameFramework/PlayerController.h"
 
+#include "Items/RPGContainerInstanceComponent.h"
+
 #include "HotbarComponent.generated.h"
+
+class IRPGUserInterface;
 
 /* Should be attached to PlayerController */
 UCLASS(BlueprintType)
 class RPGBASE_API UHotbarComponent
-	: public UContainerInstanceComponent
+	: public URPGContainerInstanceComponent
 {
 	GENERATED_BODY()
 	
@@ -23,13 +26,13 @@ public:
 	// TODO: SetupPlayerInput
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Hotbar")
-	bool CanUse(int32 InSlot);
+	bool CanUse(int32 Slot);
 	virtual bool CanUse_Implementation(int32 Slot);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Hotbar")
-	bool Use(int32 InSlot);
+	bool Use(int32 Slot);
 	virtual bool Use_Implementation(int32 Slot);
 
 private:
-	APlayerController* GetOwner();
+	TScriptInterface<IRPGUserInterface> GetUser();
 };

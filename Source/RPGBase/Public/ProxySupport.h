@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RPGCharacterInterface.h"
+
+#include "RPGPlayerInterface.h"
 
 //#include "ProxySupport.generated.h"
 
@@ -27,7 +28,7 @@ public:
 };
 
 template <typename TProxy, typename T>
-static TProxy* GetOrCreateProxy(TScriptInterface<IRPGCharacterInterface> InPlayer, T* InContext)
+static TProxy* GetOrCreateProxy(TScriptInterface<IRPGPlayerInterface> InPlayer, T* InContext)
 {
 	auto Actor = Cast<AActor>(InPlayer.GetObject());
 	if (Actor == nullptr)
@@ -64,7 +65,7 @@ static TProxy* GetOrCreateProxy(TScriptInterface<IRPGCharacterInterface> InPlaye
 
 /* Call when unsubscribing! */
 template <typename TProxy, typename T>
-static void ReleaseProxy(TScriptInterface<IRPGCharacterInterface>& InPlayer, T* InContext)
+static void ReleaseProxy(TScriptInterface<IRPGPlayerInterface>& InPlayer, T* InContext)
 {
 	auto Actor = Cast<AActor>(InPlayer.GetObject());
 	if (Actor == nullptr)
@@ -89,7 +90,7 @@ static void ReleaseProxy(TScriptInterface<IRPGCharacterInterface>& InPlayer, T* 
 }
 
 template <typename TProxy, typename T>
-static bool DoOnProxy(TScriptInterface<IRPGCharacterInterface> InPlayer, T* InContext, TFunction<void(TProxy*)> InFunc)
+static bool DoOnProxy(TScriptInterface<IRPGPlayerInterface> InPlayer, T* InContext, TFunction<void(TProxy*)> InFunc)
 {
 	const auto Proxy = GetOrCreateProxy<TProxy, T>(InPlayer, InContext);
 	if (Proxy == nullptr)

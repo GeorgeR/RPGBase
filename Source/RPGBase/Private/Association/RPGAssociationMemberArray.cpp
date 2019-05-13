@@ -1,7 +1,7 @@
-#include "RPGAssociationMemberArray.h"
+#include "Association/RPGAssociationMemberArray.h"
 
-#include "RPGAssociationMember.h"
-#include "RPGAssociation.h"
+#include "Association/RPGAssociationMember.h"
+#include "Association/RPGAssociation.h"
 
 FRPGAssociationMemberArray::FRPGAssociationMemberArray()
 	: Owner(nullptr) { }

@@ -1,8 +1,8 @@
-#include "RPGAssociationMember.h"
+#include "Association/RPGAssociationMember.h"
 
 #include "RPGPlayerInterface.h"
-#include "RPGAssociation.h"
-#include "RPGAssociationMemberArray.h"
+#include "Association/RPGAssociation.h"
+#include "Association/RPGAssociationMemberArray.h"
 
 void FRPGAssociationMember::PreReplicatedRemove(const FRPGAssociationMemberArray& ArraySerializer) const
 {

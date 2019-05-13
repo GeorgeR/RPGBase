@@ -1,16 +1,16 @@
-#include "RPGContainerFactory.h"
+#include "Factories/RPGContainerFactory.h"
 
-#include "RPGContainer.h"
-#include "ContainerInstanceComponent.h"
-#include "ContainerInstanceInterface.h"
-#include "UniqueIdFactory.h"
+#include "Items/RPGContainer.h"
+#include "Items/RPGContainerInstanceComponent.h"
+#include "Items/RPGContainerInstanceInterface.h"
+#include "Factories/UniqueIdFactory.h"
 
 URPGContainerFactory::URPGContainerFactory()
 {
 	UniqueIdFactory = CreateDefaultSubobject<UUniqueIdFactory>(TEXT("UniqueIdFactory"));
 }
 
-bool URPGContainerFactory::CreateInstance_Implementation(const TScriptInterface<IRPGOwnerInterface>& Owner, TSubclassOf<URPGContainer> ContainerClass, TScriptInterface<IContainerInstanceInterface>& ContainerInstance)
+bool URPGContainerFactory::CreateInstance_Implementation(const TScriptInterface<IRPGUserInterface>& Owner, TSubclassOf<URPGContainer> ContainerClass, TScriptInterface<IRPGContainerInstanceInterface>& ContainerInstance)
 {
 	check(ContainerClass);
 	check(ContainerInstance);
@@ -20,7 +20,7 @@ bool URPGContainerFactory::CreateInstance_Implementation(const TScriptInterface<
 	return true;
 }
 
-bool URPGContainerFactory::LoadInstance_Implementation(const FString& Id, TScriptInterface<IContainerInstanceInterface>& ContainerInstance)
+bool URPGContainerFactory::LoadInstance_Implementation(const FString& Id, TScriptInterface<IRPGContainerInstanceInterface>& ContainerInstance)
 {
 	check(ContainerInstance);
 

@@ -1,7 +1,7 @@
-#include "RPGItemInstance.h"
+#include "Items/RPGItemInstance.h"
 
-#include "RPGItem.h"
-#include "ContainerInstanceComponent.h"
+#include "Items/RPGItem.h"
+#include "Items/RPGContainerInstanceComponent.h"
 
 FRPGItemInstance::FRPGItemInstance()
 	: Id(TEXT("Invalid")),
@@ -56,10 +56,10 @@ FRPGItemInstance FRPGItemInstance::SplitStack(const int32 Amount)
 	return NewItem;
 }
 
-FRPGItemInstance FRPGItemInstance::Clone(const int32 StackSize)
+FRPGItemInstance FRPGItemInstance::Clone(const int32 InStackSize)
 {
 	auto Result(*this);
-	Result.StackSize = StackSize;
+	Result.StackSize = InStackSize;
 	return Result;
 }
 
@@ -111,4 +111,4 @@ URPGItem* FRPGItemInstance::GetItem()
 	return CachedItem;
 }
 
-void FItemInstanceArray::RegisterWithOwner(class UContainerInstanceComponent* Owner) { this->Owner = Owner; }
+void FItemInstanceArray::RegisterWithOwner(class URPGContainerInstanceComponent* InOwner) { this->Owner = InOwner; }

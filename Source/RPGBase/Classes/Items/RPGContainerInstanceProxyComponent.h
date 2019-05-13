@@ -3,28 +3,28 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 
-#include "RPGItemInstance.h"
+#include "Items/RPGItemInstance.h"
+#include "Items/RPGContainerInstanceComponent.h"
 #include "ProxySupport.h"
-#include "ContainerInstanceComponent.h"
 
-#include "ContainerInstanceProxyComponent.generated.h"
+#include "RPGContainerInstanceProxyComponent.generated.h"
 
 /* Wrapper to call RPC's for a Container via a PlayerController */
 UCLASS(BlueprintType)
 class RPGBASE_API UContainerInstanceProxyComponent
 	: public UActorComponent,
-	public TProxy<UContainerInstanceComponent>
+	public TProxy<URPGContainerInstanceComponent>
 {
 	GENERATED_BODY()
 
 private:
-	friend class UContainerInstanceComponent;
+	friend class URPGContainerInstanceComponent;
 
 	UPROPERTY()
-	UContainerInstanceComponent* Context;
+	URPGContainerInstanceComponent* Context;
 
-	void SetContextAs(UContainerInstanceComponent* InContext) override;
-	UContainerInstanceComponent* GetContextAs() const override;
+	void SetContextAs(URPGContainerInstanceComponent* InContext) override;
+	URPGContainerInstanceComponent* GetContextAs() const override;
 
 	UPROPERTY()
 	TArray<float> ItemTimestamps;
@@ -64,13 +64,13 @@ private:
 	virtual void Client_SwapItems_Implementation(float InTimeStamp, int32 InSourceSlot, int32 InDestinationSlot);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_TransferItem(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
-	virtual bool Server_TransferItem_Validate(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
-	virtual void Server_TransferItem_Implementation(int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+	void Server_TransferItem(int32 InSourceSlot, URPGContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+	virtual bool Server_TransferItem_Validate(int32 InSourceSlot, URPGContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+	virtual void Server_TransferItem_Implementation(int32 InSourceSlot, URPGContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
 
 	UFUNCTION(Client, Reliable)
-	void Client_TransferItem(float InTimeStamp, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
-	virtual void Client_TransferItem_Implementation(float InTimeStamp, int32 InSourceSlot, UContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+	void Client_TransferItem(float InTimeStamp, int32 InSourceSlot, URPGContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
+	virtual void Client_TransferItem_Implementation(float InTimeStamp, int32 InSourceSlot, URPGContainerInstanceComponent* InDestinationContainer, int32 InDestinationSlot);
 
 	inline bool IsNewer(float InTimeStamp, int32 InSlot);
 	void SetItemIfNewer(float InTimeStamp, const FRPGItemInstance& InItem, int32 InSlot);

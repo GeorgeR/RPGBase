@@ -1,9 +1,10 @@
 #include "RPGAssetManager.h"
+
 #include "Engine/Engine.h"
 #include "LogMacros.h"
 
 #include "RPGBaseModule.h"
-#include "RPGItem.h"
+#include "Items/RPGItem.h"
 
 const FPrimaryAssetType URPGAssetManager::ConsumableItemType = TEXT("Consumable");
 const FPrimaryAssetType URPGAssetManager::EquippableItemType = TEXT("Equippable");

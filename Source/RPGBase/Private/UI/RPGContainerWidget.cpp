@@ -1,9 +1,9 @@
-#include "RPGContainerWidget.h"
+#include "UI/RPGContainerWidget.h"
 
 #include "GridSlot.h"
 #include "GridPanel.h"
 
-void URPGContainerWidget::SetContext(UContainerInstanceComponent* InContext)
+void URPGContainerWidget::SetContext(URPGContainerInstanceComponent* InContext)
 {
     if(Context != nullptr)
     {

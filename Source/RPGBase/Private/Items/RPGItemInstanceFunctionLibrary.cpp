@@ -1,4 +1,2 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-#include "RPGItemInstanceFunctionLibrary.h"
+#include "Items/RPGItemInstanceFunctionLibrary.h"
 

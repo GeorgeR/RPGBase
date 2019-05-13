@@ -1,5 +1,8 @@
 #include "HotbarComponent.h"
-#include "UsableInterface.h"
+
+#include "Items/UsableInterface.h"
+
+#include "RPGUserInterface.h"
 
 UHotbarComponent::UHotbarComponent()
 {
@@ -22,7 +25,7 @@ bool UHotbarComponent::CanUse_Implementation(int32 InSlot)
 	if (Usable == nullptr)
 		return false;
 
-	return Usable->CanUse(GetOwner(), Items[InSlot]);
+	return Usable->CanUse(GetUser(), Items[InSlot]);
 }
 
 bool UHotbarComponent::Use_Implementation(int32 InSlot)
@@ -34,13 +37,15 @@ bool UHotbarComponent::Use_Implementation(int32 InSlot)
 	if (Usable == nullptr)
 		return false;
 
-	Usable->Use(GetOwner(), Items[InSlot]);
+	Usable->Use(GetUser(), Items[InSlot]);
 
 	return true;
 }
 
-APlayerController* UHotbarComponent::GetOwner()
+TScriptInterface<IRPGUserInterface> UHotbarComponent::GetUser()
 {
-	const auto Owner = Super::GetOwner();
-	return Cast<APlayerController>(Owner);
+	return Super::GetOwner();
+	//const auto Result = Super::GetOwner();
+	//return Result; // This probably fails
+	//return Cast<APlayerController>(Result);
 }

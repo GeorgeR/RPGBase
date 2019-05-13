@@ -1,4 +1,4 @@
-#include "RPGItem.h"
+#include "Items/RPGItem.h"
 
 const FText& URPGItem::GetDisplayName(const FRPGItemInstance& ItemInstance) const
 {

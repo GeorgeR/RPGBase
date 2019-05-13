@@ -3,9 +3,11 @@
 #include "CoreMinimal.h"
 #include "Interface.h"
 
-#include "RPGItemInstance.h"
+#include "Items/RPGItemInstance.h"
 
 #include "UsableInterface.generated.h"
+
+class IRPGUserInterface;
 
 UINTERFACE(MinimalAPI)
 class UUsableInterface
@@ -20,12 +22,12 @@ class RPGBASE_API IUsableInterface
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Item|Usable")
-	bool CanUse(AActor* TargetUser, FRPGItemInstance& ItemInstance);
-	virtual bool CanUse_Implementation(AActor* TargetUser, FRPGItemInstance& ItemInstance) = 0;
+	bool CanUse(const TScriptInterface<IRPGUserInterface>& TargetUser, FRPGItemInstance& ItemInstance);
+	virtual bool CanUse_Implementation(const TScriptInterface<IRPGUserInterface>& TargetUser, FRPGItemInstance& ItemInstance) = 0;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Item|Usable")
-	void Use(AActor* TargetUser, FRPGItemInstance& ItemInstance);
-	virtual void Use_Implementation(AActor* TargetUser, FRPGItemInstance& ItemInstance) = 0;
+	void Use(const TScriptInterface<IRPGUserInterface>& TargetUser, FRPGItemInstance& ItemInstance);
+	virtual void Use_Implementation(const TScriptInterface<IRPGUserInterface>& TargetUser, FRPGItemInstance& ItemInstance) = 0;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Item|Usable")
 	void PostUse(FRPGItemInstance& ItemInstance);

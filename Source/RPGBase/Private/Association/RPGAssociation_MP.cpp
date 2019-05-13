@@ -1,4 +1,4 @@
-#include "RPGAssociation.h"
+#include "Association/RPGAssociation.h"
 
 #include "ScriptInterface.h"
 

@@ -48,7 +48,7 @@ public:
 
 	virtual FRPGItemInstance SplitStack(int32 Amount);
 
-	virtual FRPGItemInstance Clone(int32 StackSize);
+	virtual FRPGItemInstance Clone(int32 InStackSize);
 
 	static FIntPoint GetIndex2D(int32 ColumnCount, int32 Slot);
 
@@ -79,9 +79,9 @@ struct RPGBASE_API FItemInstanceArray
 	GENERATED_BODY()
 
 public:
-	class UContainerInstanceComponent* Owner;
+	class URPGContainerInstanceComponent* Owner;
 
-	void RegisterWithOwner(class UContainerInstanceComponent* InOwner);
+	void RegisterWithOwner(class URPGContainerInstanceComponent* InOwner);
 
 	/* Access this as though it were the array itself */
 	operator TArray<FRPGItemInstance>&() { return Items; }

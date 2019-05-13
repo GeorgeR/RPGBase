@@ -1,8 +1,9 @@
-#include "RPGItemFactory.h"
+#include "Factories/RPGItemFactory.h"
 
-#include "RPGItem.h"
 #include "Engine/World.h"
-#include "UniqueIdFactory.h"
+
+#include "Factories/UniqueIdFactory.h"
+#include "Items/RPGItem.h"
 
 URPGItemFactory::URPGItemFactory()
 {

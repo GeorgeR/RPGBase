@@ -5,32 +5,32 @@
 #include "ScriptInterface.h"
 #include "SoftObjectPtr.h"
 
-#include "RPGItemInstance.h"
+#include "Items/RPGItemInstance.h"
 
-#include "ContainerInstanceInterface.generated.h"
+#include "RPGContainerInstanceInterface.generated.h"
 
 class URPGContainer;
 class IRPGCharacterInterface;
-class IRPGOwnerInterface;
+class IRPGUserInterface;
 
 UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
-class UContainerInstanceInterface
+class URPGContainerInstanceInterface
 	: public UInterface
 {
 	GENERATED_BODY()
 };
 
-class RPGBASE_API IContainerInstanceInterface
+class RPGBASE_API IRPGContainerInstanceInterface
 {
 	GENERATED_BODY()
 
 public:
 #pragma region Setup
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual void Create(const TSoftClassPtr<URPGContainer>& ContainerClass, const FString& Id, const TScriptInterface<IRPGOwnerInterface>& Owner) = 0;
+	virtual void Create(const TSoftClassPtr<URPGContainer>& ContainerClass, const FString& Id, const TScriptInterface<IRPGUserInterface>& Owner) = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual void SetContainerOwner(TScriptInterface<IRPGOwnerInterface>& Owner) = 0;
+	virtual void SetContainerOwner(TScriptInterface<IRPGUserInterface>& Owner) = 0;
 #pragma endregion
 
 #pragma region Queries
@@ -38,7 +38,7 @@ public:
 	virtual URPGContainer* GetContainer() = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual const TScriptInterface<IRPGOwnerInterface>& GetContainerOwner(TScriptInterface<IRPGOwnerInterface>& Owner) const = 0;
+	virtual const TScriptInterface<IRPGUserInterface>& GetContainerOwner(TScriptInterface<IRPGUserInterface>& Owner) const = 0;
 
 	/* Returns total capacity of the container (rows * columns) */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
@@ -84,6 +84,6 @@ public:
 
 	/* Transfer an item from this container to another */
 	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	virtual bool TransferItem(int32 SourceSlot, TScriptInterface<IContainerInstanceInterface>& DestinationContainer, int32 DestinationSlot) = 0;
+	virtual bool TransferItem(int32 SourceSlot, TScriptInterface<IRPGContainerInstanceInterface>& DestinationContainer, int32 DestinationSlot) = 0;
 #pragma endregion Functions
 };

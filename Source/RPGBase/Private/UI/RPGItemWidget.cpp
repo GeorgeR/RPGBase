@@ -1,16 +1,16 @@
-#include "RPGItemWidget.h"
+#include "UI/RPGItemWidget.h"
 
-#include "RPGItem.h"
+#include "Items/RPGItem.h"
 
-void URPGItemWidget::SetContext(const FRPGItemInstance& Context)
+void URPGItemWidget::SetContext(const FRPGItemInstance& InContext)
 {
-	this->Context = Context;
+	this->Context = InContext;
 
 	const auto Item = this->Context.GetItem();
-	Name = Item->GetDisplayName(Context);
+	Name = Item->GetDisplayName(InContext);
 	Description = Item->Description;
 	Icon = Item->Icon.LoadSynchronous();
-	StackSize = Context.StackSize;
+	StackSize = InContext.StackSize;
 	bIsStackable = Item->bIsStackable;
 }
 

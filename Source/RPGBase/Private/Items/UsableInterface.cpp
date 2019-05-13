@@ -1,10 +1,11 @@
-#include "UsableInterface.h"
-#include "ConsumableInterface.h"
-#include "EquippableInterface.h"
+#include "Items/UsableInterface.h"
+
+#include "Items/ConsumableInterface.h"
+#include "Items/EquippableInterface.h"
 
 // TODO: Don't reference sub-interfaces here!!
 
-bool IUsableInterface::CanUse_Implementation(AActor* InTargetUser, FRPGItemInstance& ItemInstance)
+bool IUsableInterface::CanUse_Implementation(const TScriptInterface<IRPGUserInterface>& InTargetUser, FRPGItemInstance& ItemInstance)
 {
 	auto Consumable = Cast<IConsumableInterface>(this);
 	if(Consumable)
@@ -17,7 +18,7 @@ bool IUsableInterface::CanUse_Implementation(AActor* InTargetUser, FRPGItemInsta
 	return false;
 }
 
-void IUsableInterface::Use_Implementation(AActor* InTargetUser, FRPGItemInstance& ItemInstance)
+void IUsableInterface::Use_Implementation(const TScriptInterface<IRPGUserInterface>& InTargetUser, FRPGItemInstance& ItemInstance)
 {
 	auto Consumable = Cast<IConsumableInterface>(this);
 	if(Consumable)

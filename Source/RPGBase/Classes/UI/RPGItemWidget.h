@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "UserWidget.h"
 
-#include "RPGItemInstance.h"
+#include "Items/RPGItemInstance.h"
 
 #include "RPGItemWidget.generated.h"
 

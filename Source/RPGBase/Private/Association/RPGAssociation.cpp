@@ -1,9 +1,10 @@
-#include "RPGAssociation.h"
+#include "Association/RPGAssociation.h"
+
+#include "Net/UnrealNetwork.h"
 
 #include "RPGBaseMacros.h"
-#include "RPGAssociationMember.h"
-#include "RPGAssociationMemberArray.h"
-#include "Net/UnrealNetwork.h"
+#include "Association/RPGAssociationMember.h"
+#include "Association/RPGAssociationMemberArray.h"
 
 URPGAssociation::URPGAssociation()
 {
