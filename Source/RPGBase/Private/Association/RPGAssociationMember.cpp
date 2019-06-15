@@ -1,6 +1,6 @@
 #include "Association/RPGAssociationMember.h"
 
-#include "RPGPlayerInterface.h"
+#include "Interfaces/RPGPlayerInterface.h"
 #include "Association/RPGAssociation.h"
 #include "Association/RPGAssociationMemberArray.h"
 

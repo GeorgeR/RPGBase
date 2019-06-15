@@ -4,7 +4,7 @@
 #include "Interface.h"
 
 #include "Items/RPGItemInstance.h"
-#include "Items/UsableInterface.h"
+#include "Items/Interfaces/UsableInterface.h"
 
 #include "ConsumableInterface.generated.h"
 

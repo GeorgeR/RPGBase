@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 
-#include "Items/RPGContainerInstanceInterface.h"
+#include "Items/Interfaces/RPGContainerInstanceInterface.h"
 
 #include "InventoryComponent.generated.h"
 

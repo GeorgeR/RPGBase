@@ -2,7 +2,7 @@
 
 #include "Items/RPGContainer.h"
 #include "Items/RPGContainerInstanceComponent.h"
-#include "Items/RPGContainerInstanceInterface.h"
+#include "Items/Interfaces/RPGContainerInstanceInterface.h"
 #include "Factories/UniqueIdFactory.h"
 
 URPGContainerFactory::URPGContainerFactory()
@@ -24,7 +24,7 @@ bool URPGContainerFactory::LoadInstance_Implementation(const FString& Id, TScrip
 {
 	check(ContainerInstance);
 
-	// TODO: Read from persistent store, write data to the instance
+	// #todo Read from persistent store, write data to the instance
 
 	return true;
 }

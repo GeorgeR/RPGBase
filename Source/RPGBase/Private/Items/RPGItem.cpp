@@ -12,6 +12,6 @@ const FText& URPGItem::GetDisplayName(const FRPGItemInstance& ItemInstance) cons
 
 FPrimaryAssetId URPGItem::GetPrimaryAssetId() const
 {
-	/* TODO: For blueprints, we need to strip then _C suffix */
+	/* #todo For blueprints, we need to strip then _C suffix */
 	return FPrimaryAssetId(AssetType, GetFName());
 }

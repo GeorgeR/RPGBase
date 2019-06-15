@@ -1,9 +1,9 @@
-#include "Items/UsableInterface.h"
+#include "Items/Interfaces/UsableInterface.h"
 
-#include "Items/ConsumableInterface.h"
-#include "Items/EquippableInterface.h"
+#include "Items/Interfaces/ConsumableInterface.h"
+#include "Items/Interfaces/EquippableInterface.h"
 
-// TODO: Don't reference sub-interfaces here!!
+// #todo Don't reference sub-interfaces here!!
 
 bool IUsableInterface::CanUse_Implementation(const TScriptInterface<IRPGUserInterface>& InTargetUser, FRPGItemInstance& ItemInstance)
 {

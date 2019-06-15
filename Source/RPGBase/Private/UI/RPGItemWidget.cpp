@@ -16,5 +16,5 @@ void URPGItemWidget::SetContext(const FRPGItemInstance& InContext)
 
 void URPGItemWidget::SplitStack(int32 Amount)
 {
-	URPGItem::SplitStack(Context, Amount);
+	//URPGItem::SplitStack(Context, Amount);
 }

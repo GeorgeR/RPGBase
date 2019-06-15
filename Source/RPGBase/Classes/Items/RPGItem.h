@@ -46,28 +46,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Item", meta = (EditCondition = bIsStackable))
 	int32 MaxStackSize;
 
-#pragma region ItemInstance Functions
-	/* These are just wrappers (for BP users), they call the non-BP function on the ItemInstance. */
-
-	/* Returns the amount actually added to the stack (ie. if it was beyond capacity). You might customize this to add another item with the remaining amount. */
-	UFUNCTION(BlueprintCallable, Category = "RPG Base|Item")
-	static int32 AddToStack(FRPGItemInstance& ItemInstance, int32 Amount) { return ItemInstance.AddToStack(Amount); }
-
-	/* Returns amount actually removed. */
-	UFUNCTION(BlueprintCallable, Category = "RPG Base|Item")
-	static int32 RemoveFromStack(FRPGItemInstance& ItemInstance, int32 Amount) { return ItemInstance.RemoveFromStack(Amount); }
-
-	/* Returns the balance */
-	UFUNCTION(BlueprintCallable, Category = "RPG Base|Item")
-	static FRPGItemInstance SplitStack(FRPGItemInstance& ItemInstance, int32 Amount) { return ItemInstance.SplitStack(Amount); }
-
-	UFUNCTION(BlueprintCallable, Category = "RPG Base|Item")
-	static FRPGItemInstance Clone(FRPGItemInstance& ItemInstance, int32 StackSize) { return ItemInstance.Clone(StackSize); }
-
-	UFUNCTION(BlueprintCallable, Category = "RPG Base|Item")
-	static URPGItem* GetInstanceItem(FRPGItemInstance& ItemInstance) { return ItemInstance.GetItem(); }
-#pragma endregion ItemInstance Functions
-
 	/* Will return the singular or plural name depending on stack size */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "RPG Base|Item")
 	const FText& GetDisplayName(const FRPGItemInstance& ItemInstance) const;

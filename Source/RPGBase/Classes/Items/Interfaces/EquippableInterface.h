@@ -3,8 +3,8 @@
 #include "CoreMinimal.h"
 #include "Interface.h"
 
-#include "RPGItemInstance.h"
-#include "UsableInterface.h"
+#include "Items/RPGItemInstance.h"
+#include "Items/Interfaces/UsableInterface.h"
 
 #include "EquippableInterface.generated.h"
 

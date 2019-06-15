@@ -2,9 +2,9 @@
 
 #include "CoreMinimal.h"
 
-#include "RPGItem.h"
-#include "ConsumableInterface.h"
-#include "UsableInterface.h"
+#include "Items/RPGItem.h"
+#include "Items/Interfaces/ConsumableInterface.h"
+#include "Items/Interfaces/UsableInterface.h"
 
 #include "RPGConsumableItem.generated.h"
 

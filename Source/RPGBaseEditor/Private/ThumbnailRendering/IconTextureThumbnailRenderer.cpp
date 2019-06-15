@@ -4,7 +4,7 @@
 #include "CanvasItem.h"
 #include "CanvasTypes.h"
 
-#include "RPGItem.h"
+#include "Items/RPGItem.h"
 
 bool UIconTextureThumbnailRenderer::CanVisualizeAsset(UObject* Object)
 {

@@ -81,8 +81,8 @@ public:
 	virtual bool TransferItem_Implementation(const TScriptInterface<IRPGUserInterface>& Instigator, int32 SourceSlot, URPGContainerInstanceComponent* DestinationContainer, int32 DestinationSlot);
 #pragma endregion Transfer
 
-	UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
-	static class UContainerInstanceProxyComponent* CreateProxy(URPGContainerInstanceComponent* ContainerInstance);
+	//UFUNCTION(BlueprintCallable, Category = "RPG Base|Container")
+	//static class UContainerInstanceProxyComponent* CreateProxy(URPGContainerInstanceComponent* ContainerInstance);
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

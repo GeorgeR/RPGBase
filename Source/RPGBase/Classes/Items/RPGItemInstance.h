@@ -23,26 +23,26 @@ public:
 	virtual ~FRPGItemInstance() = default;
 
 	/* Unique Id of the instance */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Item")
 	FString Id;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Item")
 	TSoftClassPtr<URPGItem> ItemClass;
 
 	/* Id of the owning container, ie. an inventory or the world. */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Item")
 	FString ContainerId;
 
 	/* Current stack size, limited by Item's MaxStackSize */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Item")
 	int32 StackSize;
 
-	URPGItem* GetItem();
+	URPGItem* GetItem() const;
 
 	/* Returns the amount actually added to the stack (ie. if it was beyond capacity). You might customize this to add another item with the remaining amount. */
 	virtual int32 AddToStack(int32 Amount);
 
-	// TODO: If resulting stack size is 0, destroy the item
+	// #todo If resulting stack size is 0, destroy the item
 	/* Returns amount actually removed. */
 	virtual int32 RemoveFromStack(int32 Amount);
 
@@ -64,10 +64,6 @@ public:
 	}
 
 	inline bool IsValid() const { return Id != TEXT("Invalid"); }
-
-private:
-	UPROPERTY(Transient)
-	class URPGItem* CachedItem;
 };
 
 /* Remember to call MarkArrayDirty if an item is removed,

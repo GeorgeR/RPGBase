@@ -7,14 +7,11 @@ FRPGItemInstance::FRPGItemInstance()
 	: Id(TEXT("Invalid")),
 	ItemClass(nullptr),
 	ContainerId(TEXT("")),
-	StackSize(0),
-	CachedItem(nullptr) { }
+	StackSize(0) { }
 
 FRPGItemInstance::FRPGItemInstance(const FRPGItemInstance& Source)
 {
-	CachedItem = nullptr;
-
-	Id = Source.Id; // TODO: Id should be new
+	Id = Source.Id; // #todo Id should be new
 	ItemClass = Source.ItemClass;
 	ContainerId = Source.ContainerId;
 	StackSize = Source.StackSize;
@@ -96,19 +93,16 @@ void FRPGItemInstance::PostReplicatedAdd(const struct FItemInstanceArray& ArrayS
 bool FRPGItemInstance::operator==(const FRPGItemInstance& Other) const { return Id == Other.Id; }
 bool FRPGItemInstance::operator!=(const FRPGItemInstance& Other) const { return !(*this == Other); }
 
-URPGItem* FRPGItemInstance::GetItem()
+URPGItem* FRPGItemInstance::GetItem() const
 {
 	if (!ItemClass.IsValid())
 		return nullptr;
 
-	if(CachedItem == nullptr)
-	{
-		const auto Class = ItemClass.LoadSynchronous();
-		if (Class != nullptr)
-			CachedItem = Cast<URPGItem>(Class->GetDefaultObject());
-	}
+	const auto Class = ItemClass.LoadSynchronous();
+	if (Class != nullptr)
+		return Cast<URPGItem>(Class->GetDefaultObject());
 
-	return CachedItem;
+	return nullptr;
 }
 
 void FItemInstanceArray::RegisterWithOwner(class URPGContainerInstanceComponent* InOwner) { this->Owner = InOwner; }

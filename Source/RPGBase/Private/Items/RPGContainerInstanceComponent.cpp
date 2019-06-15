@@ -3,7 +3,7 @@
 #include "UnrealNetwork.h"
 #include "GameFramework/Actor.h"
 
-#include "Items/RPGContainerInstanceProxyComponent.h"
+//#include "Items/RPGContainerInstanceProxyComponent.h"
 
 URPGContainerInstanceComponent::URPGContainerInstanceComponent()
 	: CachedContainer(nullptr)

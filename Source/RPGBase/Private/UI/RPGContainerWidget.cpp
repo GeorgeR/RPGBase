@@ -29,7 +29,7 @@ void URPGContainerWidget::OnItemAdded(const FRPGItemInstance& Item, int32 InSlot
 
 	if(!ItemsPanel->ReplaceChildAt(InSlot, ItemWidget))
 	{
-	    // TODO: Log error
+	    // #todo Log error
 	}
 	else
 	{

@@ -2,7 +2,8 @@
 
 #include "AssetTypeActions_Base.h"
 
-#include "RPGContainer.h"
+#include "Items/RPGContainer.h"
+
 #include "Framework/MultiBox/MultiBoxBuilder.h"
 
 class FAssetTypeActions_RPGContainer 

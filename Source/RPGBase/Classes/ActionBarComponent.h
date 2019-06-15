@@ -5,13 +5,13 @@
 
 #include "Items/RPGContainerInstanceComponent.h"
 
-#include "HotbarComponent.generated.h"
+#include "ActionBarComponent.generated.h"
 
 class IRPGUserInterface;
 
 /* Should be attached to PlayerController */
 UCLASS(BlueprintType)
-class RPGBASE_API UHotbarComponent
+class RPGBASE_API UActionBarComponent
 	: public URPGContainerInstanceComponent
 {
 	GENERATED_BODY()
@@ -21,9 +21,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	TArray<FName> ActionMapping;
 
-	UHotbarComponent();
+	UActionBarComponent();
 
-	// TODO: SetupPlayerInput
+	// #todo SetupPlayerInput
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RPG Base|Hotbar")
 	bool CanUse(int32 Slot);

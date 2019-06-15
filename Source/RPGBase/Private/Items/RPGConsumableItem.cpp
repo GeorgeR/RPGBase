@@ -25,7 +25,7 @@ void URPGConsumableItem::PostUse_Implementation(FRPGItemInstance& ItemInstance)
 
 bool URPGConsumableItem::CanConsume_Implementation(const TScriptInterface<IRPGUserInterface>& TargetConsumer, FRPGItemInstance& ItemInstance)
 {
-	// TODO: More checks like if the TargetConsumer owns the item
+	// #todo More checks like if the TargetConsumer owns the item
 
 	return ItemInstance.StackSize > 0;
 }

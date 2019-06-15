@@ -14,14 +14,14 @@ URPGAssociation::URPGAssociation()
 /* Create */
 URPGAssociation* URPGAssociation::Create(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName)
 {
-	// TODO: Check if on client, server (or single player)
+	// #todo Check if on client, server (or single player)
 	if (IS_SERVER_OR_SINGLEPLAYER)
 	{
-		// TODO: Check if Creator is already in association
+		// #todo Check if Creator is already in association
 		auto Result = NewObject<URPGAssociation>(nullptr);
 
 		Result->Name = AssociationName;
-		// TODO: Add default owner rank
+		// #todo Add default owner rank
 		Result->AddMember(Creator, TEXT("Owner"));
 
 		return Result;
@@ -29,7 +29,7 @@ URPGAssociation* URPGAssociation::Create(const TScriptInterface<IRPGPlayerInterf
 #if WITH_NETWORKING
 	else
 	{
-		// TODO: This static business is no good
+		// #todo This static business is no good
 		//Server_Create(Creator, AssociationName);
 		return nullptr;
 	}
@@ -39,12 +39,12 @@ URPGAssociation* URPGAssociation::Create(const TScriptInterface<IRPGPlayerInterf
 /* Invite */
 bool URPGAssociation::Invite_Implementation(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee)
 {
-	// TODO: Check if on client, server (or single player)
+	// #todo Check if on client, server (or single player)
 	if (IS_SERVER_OR_SINGLEPLAYER)
 	{
 		// If InInvite is already in an association, return false
 
-		// TODO: Split invite and invite acceptance?
+		// #todo Split invite and invite acceptance?
 
 		OnInviteAccepted.Broadcast(Invitee);
 
@@ -62,7 +62,7 @@ bool URPGAssociation::Invite_Implementation(const FRPGAssociationMember& Inviter
 /* Add */
 bool URPGAssociation::AddMember_Implementation(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank)
 {
-	// TODO: Check if on client, server (or single player)
+	// #todo Check if on client, server (or single player)
 	if (IS_SERVER_OR_SINGLEPLAYER)
 	{
 		if (IsMember(Player))
@@ -92,7 +92,7 @@ bool URPGAssociation::AddMember_Implementation(const TScriptInterface<IRPGPlayer
 // Default implementation doesn't care who the Dismisser is, you should definitely override this
 bool URPGAssociation::RemoveMember_Implementation(const FRPGAssociationMember& Dismisser, const FRPGAssociationMember& Member)
 {
-	// TODO: Check if on client, server (or single player)
+	// #todo Check if on client, server (or single player)
 	if (IS_SERVER_OR_SINGLEPLAYER)
 	{
 		TArray<FRPGAssociationMember>& Members_ = Members;
@@ -119,10 +119,10 @@ bool URPGAssociation::RemoveMember_Implementation(const FRPGAssociationMember& D
 /* Change Rank */
 bool URPGAssociation::ChangeMemberRank_Implementation(const FRPGAssociationMember& Changer, FRPGAssociationMember& Member, const FString& NewRank)
 {
-	// TODO: Check if on client, server (or single player)
+	// #todo Check if on client, server (or single player)
 	if (IS_SERVER_OR_SINGLEPLAYER)
 	{
-		// TODO: Check that the Changer can actually change the members rank
+		// #todo Check that the Changer can actually change the members rank
 		Member.Rank = NewRank;
 		OnChangedRank.Broadcast(Member, NewRank);
 
@@ -140,12 +140,12 @@ bool URPGAssociation::ChangeMemberRank_Implementation(const FRPGAssociationMembe
 /* Disband */
 bool URPGAssociation::Disband_Implementation(const FRPGAssociationMember& Disbander)
 {
-	// TODO: Check if on client, server (or single player)
+	// #todo Check if on client, server (or single player)
 	if (IS_SERVER_OR_SINGLEPLAYER)
 	{
-		// TODO: Check that the disbander can actually disband
+		// #todo Check that the disbander can actually disband
 		OnDisbanded.Broadcast();
-		// TODO: Destroy
+		// #todo Destroy
 		return true;
 	}
 #if WITH_NETWORKING

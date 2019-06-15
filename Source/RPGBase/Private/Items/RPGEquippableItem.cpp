@@ -18,7 +18,7 @@ void URPGEquippableItem::PostUse_Implementation(FRPGItemInstance& ItemInstance)
 
 bool URPGEquippableItem::CanEquip_Implementation(const TScriptInterface<IRPGUserInterface>& TargetWearer, FRPGItemInstance& ItemInstance, FName TargetSocket /*= TEXT("")*/, int32 TargetSlot /*= -1*/)
 {
-	// TODO: Check that the wearer is also the owner
+	// #todo Check that the wearer is also the owner
 	
 	return true;
 }
@@ -30,5 +30,5 @@ void URPGEquippableItem::Equip_Implementation(const TScriptInterface<IRPGUserInt
 
 void URPGEquippableItem::UnEquip_Implementation(const TScriptInterface<IRPGUserInterface>& Wearer, FRPGItemInstance& ItemInstance, FName Socket /*= TEXT("")*/, int32 Slot /*= -1*/)
 {
-	// TODO: Return to inventory?
+	// #todo Return to inventory?
 }

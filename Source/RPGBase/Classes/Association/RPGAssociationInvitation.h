@@ -5,7 +5,7 @@
 #include "NoExportTypes.h"
 
 #include "RPGAssociationMember.h"
-#include "RPGPlayerInterface.h"
+#include "Interfaces/RPGPlayerInterface.h"
 
 #include "RPGAssociationInvitation.generated.h"
 

@@ -12,7 +12,7 @@ class URPGPlayerInterface
 	GENERATED_BODY()
 };
 
-/* Used by the Ability system, should be implemented by player and NPC characters. */
+/* Should be implemented by player and NPC characters. */
 class RPGBASE_API IRPGPlayerInterface
 {
 	GENERATED_BODY()

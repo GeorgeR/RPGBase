@@ -1,7 +1,7 @@
 #include "Items/RPGContainerInstanceComponent.h"
 
-#include "Items/RPGContainerInstanceProxyComponent.h"
-#include "RPGPlayerInterface.h"
+//#include "Items/RPGContainerInstanceProxyComponent.h"
+#include "Interfaces/RPGPlayerInterface.h"
 //
 //bool UContainerInstanceComponent::AddItem_MP(APlayerController* Player, const FRPGItemInstance& Item, const int32 Slot)
 //{
