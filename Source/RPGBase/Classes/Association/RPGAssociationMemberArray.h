@@ -30,7 +30,7 @@ public:
 		return Result;
 	}
 	
-	void RegisterWithOwner(class URPGAssociation* Owner);
+	void RegisterWithOwner(class URPGAssociation* InOwner);
 
 	bool NetDeltaSerialize(FNetDeltaSerializeInfo& DeltaParms);
 

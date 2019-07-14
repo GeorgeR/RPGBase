@@ -6,9 +6,9 @@
 FRPGAssociationMemberArray::FRPGAssociationMemberArray()
 	: Owner(nullptr) { }
 
-void FRPGAssociationMemberArray::RegisterWithOwner(URPGAssociation* Owner)
+void FRPGAssociationMemberArray::RegisterWithOwner(URPGAssociation* InOwner)
 {
-	this->Owner = Owner;
+	this->Owner = InOwner;
 }
 
 bool FRPGAssociationMemberArray::NetDeltaSerialize(FNetDeltaSerializeInfo& DeltaParms)
