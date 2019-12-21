@@ -103,39 +103,39 @@ protected:
 
 	/* Create */
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_Create(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName);
-	virtual bool Server_Create_Validate(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName) { return true; }
-	virtual void Server_Create_Implementation(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName);
+	void ServerCreate(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName);
+	virtual bool ServerCreate_Validate(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName) { return true; }
+	virtual void ServerCreate_Implementation(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName);
 
 	/* Invite */
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_Invite(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee);
-	virtual bool Server_Invite_Validate(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee) { return true; }
-	virtual void Server_Invite_Implementation(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee);
+	void ServerInvite(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee);
+	virtual bool ServerInvite_Validate(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee) { return true; }
+	virtual void ServerInvite_Implementation(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee);
 
 	/* Add */
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_AddMember(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank = TEXT(""));
-	virtual bool Server_AddMember_Validate(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank = TEXT("")) { return true; }
-	virtual void Server_AddMember_Implementation(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank = TEXT(""));
+	void ServerAddMember(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank = TEXT(""));
+	virtual bool ServerAddMember_Validate(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank = TEXT("")) { return true; }
+	virtual void ServerAddMember_Implementation(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank = TEXT(""));
 
 	/* Remove */
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_RemoveMember(const FRPGAssociationMember& Dismisser, const FRPGAssociationMember& Member);
-	virtual bool Server_RemoveMember_Validate(const FRPGAssociationMember& Dismisser, const FRPGAssociationMember& Member) { return true; }
-	virtual void Server_RemoveMember_Implementation(const FRPGAssociationMember& Dismisser, const FRPGAssociationMember& Member);
+	void ServerRemoveMember(const FRPGAssociationMember& Dismisser, const FRPGAssociationMember& Member);
+	virtual bool ServerRemoveMember_Validate(const FRPGAssociationMember& Dismisser, const FRPGAssociationMember& Member) { return true; }
+	virtual void ServerRemoveMember_Implementation(const FRPGAssociationMember& Dismisser, const FRPGAssociationMember& Member);
 
 	/* Change Rank */
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_ChangeMemberRank(const FRPGAssociationMember& Changer, const FRPGAssociationMember& Member, const FString& NewRank);
-	virtual bool Server_ChangeMemberRank_Validate(const FRPGAssociationMember& Changer, const FRPGAssociationMember& Member, const FString& NewRank) { return true; }
-	virtual void Server_ChangeMemberRank_Implementation(const FRPGAssociationMember& Changer, const FRPGAssociationMember& Member, const FString& NewRank);
+	void ServerChangeMemberRank(const FRPGAssociationMember& Changer, const FRPGAssociationMember& Member, const FString& NewRank);
+	virtual bool ServerChangeMemberRank_Validate(const FRPGAssociationMember& Changer, const FRPGAssociationMember& Member, const FString& NewRank) { return true; }
+	virtual void ServerChangeMemberRank_Implementation(const FRPGAssociationMember& Changer, const FRPGAssociationMember& Member, const FString& NewRank);
 	
 	/* Disband */
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_Disband(const FRPGAssociationMember& Disbander);
-	virtual bool Server_Disband_Validate(const FRPGAssociationMember& Disbander) { return true; }
-	virtual void Server_Disband_Implementation(const FRPGAssociationMember& Disbander);
+	void ServerDisband(const FRPGAssociationMember& Disbander);
+	virtual bool ServerDisband_Validate(const FRPGAssociationMember& Disbander) { return true; }
+	virtual void ServerDisband_Implementation(const FRPGAssociationMember& Disbander);
 
 	virtual bool Invite_Implementation(const FRPGAssociationMember& Inviter, const TScriptInterface<IRPGPlayerInterface>& Invitee);
 	virtual bool AddMember_Implementation(const TScriptInterface<IRPGPlayerInterface>& Player, const FString& Rank = TEXT(""));

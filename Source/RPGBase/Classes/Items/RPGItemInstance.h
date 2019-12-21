@@ -20,7 +20,6 @@ struct RPGBASE_API FRPGItemInstance
 public:
 	FRPGItemInstance();
 	FRPGItemInstance(const FRPGItemInstance& InSource);
-	virtual ~FRPGItemInstance() = default;
 
 	/* Unique Id of the instance */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Item")

@@ -30,7 +30,7 @@ URPGAssociation* URPGAssociation::Create(const TScriptInterface<IRPGPlayerInterf
 	else
 	{
 		// #todo This static business is no good
-		//Server_Create(Creator, AssociationName);
+		//ServerCreate(Creator, AssociationName);
 		return nullptr;
 	}
 #endif
@@ -53,7 +53,7 @@ bool URPGAssociation::Invite_Implementation(const FRPGAssociationMember& Inviter
 #if WITH_NETWORKING
 	else
 	{
-		Server_Invite(Inviter, Invitee);
+		ServerInvite(Inviter, Invitee);
 		return true;
 	}
 #endif
@@ -82,7 +82,7 @@ bool URPGAssociation::AddMember_Implementation(const TScriptInterface<IRPGPlayer
 #if WITH_NETWORKING
 	else
 	{
-		Server_AddMember(Player, Rank);
+		ServerAddMember(Player, Rank);
 		return true;
 	}
 #endif
@@ -110,7 +110,7 @@ bool URPGAssociation::RemoveMember_Implementation(const FRPGAssociationMember& D
 #if WITH_NETWORKING
 	else
 	{
-		Server_RemoveMember(Dismisser, Member);
+		ServerRemoveMember(Dismisser, Member);
 		return true;
 	}
 #endif
@@ -131,7 +131,7 @@ bool URPGAssociation::ChangeMemberRank_Implementation(const FRPGAssociationMembe
 #if WITH_NETWORKING
 	else
 	{
-		Server_ChangeMemberRank(Changer, Member, NewRank);
+		ServerChangeMemberRank(Changer, Member, NewRank);
 		return true;
 	}
 #endif
@@ -151,7 +151,7 @@ bool URPGAssociation::Disband_Implementation(const FRPGAssociationMember& Disban
 #if WITH_NETWORKING
 	else
 	{
-		Server_Disband(Disbander);
+		ServerDisband(Disbander);
 		return true;
 	}
 #endif
