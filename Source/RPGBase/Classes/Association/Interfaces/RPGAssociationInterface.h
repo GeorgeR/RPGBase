@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "ScriptInterface.h"
+#include "UObject/ScriptInterface.h"
 
 #include "RPGAssociationInterface.generated.h"
 

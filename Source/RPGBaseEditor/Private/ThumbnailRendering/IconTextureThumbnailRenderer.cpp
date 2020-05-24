@@ -1,4 +1,4 @@
-#include "IconTextureThumbnailRenderer.h"
+#include "ThumbnailRendering/IconTextureThumbnailRenderer.h"
 
 #include "Engine/Texture2D.h"
 #include "CanvasItem.h"

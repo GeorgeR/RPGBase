@@ -1,6 +1,6 @@
 #include "Association/RPGAssociation.h"
 
-#include "ScriptInterface.h"
+#include "UObject/ScriptInterface.h"
 
 /* Create */
 void URPGAssociation::ServerCreate_Implementation(const TScriptInterface<IRPGPlayerInterface>& Creator, const FString& AssociationName)

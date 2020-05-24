@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ScriptInterface.h"
-#include "NoExportTypes.h"
+#include "UObject/ScriptInterface.h"
+#include "UObject/NoExportTypes.h"
 
 #include "RPGAssociationMember.h"
 #include "Interfaces/RPGPlayerInterface.h"

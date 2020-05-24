@@ -2,8 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "ScriptInterface.h"
-#include "SoftObjectPtr.h"
+#include "UObject/ScriptInterface.h"
+#include "UObject/SoftObjectPtr.h"
 
 #include "Items/RPGItemInstance.h"
 

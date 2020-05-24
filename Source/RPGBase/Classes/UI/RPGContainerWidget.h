@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UserWidget.h"
-#include "PanelWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/PanelWidget.h"
 
 #include "Items/RPGContainerInstanceComponent.h"
 #include "RPGItemWidget.h"

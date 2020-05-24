@@ -1,10 +1,10 @@
 #include "RPGBaseEditorModule.h"
 
-#include "SlateStyle.h"
-#include "IPluginManager.h"
-#include "SlateStyleRegistry.h"
+#include "Styling/SlateStyle.h"
+#include "Styling/SlateStyleRegistry.h"
+#include "Interfaces/IPluginManager.h"
 
-#include "IconTextureThumbnailRenderer.h"
+#include "ThumbnailRendering/IconTextureThumbnailRenderer.h"
 
 #include "AssetTypeActions_RPGItem.h"
 #include "AssetTypeActions_RPGContainer.h"

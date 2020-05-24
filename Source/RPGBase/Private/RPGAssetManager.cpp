@@ -1,7 +1,7 @@
 #include "RPGAssetManager.h"
 
 #include "Engine/Engine.h"
-#include "LogMacros.h"
+#include "Logging/LogMacros.h"
 
 #include "RPGBaseModule.h"
 #include "Items/RPGItem.h"
@@ -13,7 +13,7 @@ const FPrimaryAssetType URPGAssetManager::WeaponItemType = TEXT("Weapon");
 
 URPGAssetManager& URPGAssetManager::Get()
 {
-	auto Self = Cast<URPGAssetManager>(GEngine->AssetManager);
+    const auto Self = Cast<URPGAssetManager>(GEngine->AssetManager);
 	if (Self)
 		return *Self;
 	else
@@ -23,10 +23,10 @@ URPGAssetManager& URPGAssetManager::Get()
 	}
 }
 
-URPGItem* URPGAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning /*= true*/)
+URPGItem* URPGAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning /*= true*/) const
 {
-	auto ItemPath = GetPrimaryAssetPath(PrimaryAssetId);
-	auto Item = Cast<URPGItem>(ItemPath.TryLoad());
+    const auto ItemPath = GetPrimaryAssetPath(PrimaryAssetId);
+    const auto Item = Cast<URPGItem>(ItemPath.TryLoad());
 	if (bLogWarning && Item == nullptr)
 		UE_LOG(LogRPGBase, Warning, TEXT("Failed to load item for id %s!"), *PrimaryAssetId.ToString());
 

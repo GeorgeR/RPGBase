@@ -1,6 +1,6 @@
 #include "Items/RPGContainerInstanceComponent.h"
 
-#include "UnrealNetwork.h"
+#include "Net/UnrealNetwork.h"
 #include "GameFramework/Actor.h"
 
 //#include "Items/RPGContainerInstanceProxyComponent.h"

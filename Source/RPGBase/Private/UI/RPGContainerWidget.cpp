@@ -1,7 +1,7 @@
 #include "UI/RPGContainerWidget.h"
 
-#include "GridSlot.h"
-#include "GridPanel.h"
+#include "Components/GridSlot.h"
+#include "Components/GridPanel.h"
 
 void URPGContainerWidget::SetContext(URPGContainerInstanceComponent* InContext)
 {

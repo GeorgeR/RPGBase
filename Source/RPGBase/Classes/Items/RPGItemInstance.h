@@ -21,6 +21,9 @@ public:
 	FRPGItemInstance();
 	FRPGItemInstance(const FRPGItemInstance& InSource);
 
+	/** @bug this causes crash */
+	virtual ~FRPGItemInstance() = default;
+
 	/* Unique Id of the instance */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Item")
 	FString Id;
@@ -63,6 +66,16 @@ public:
 	}
 
 	inline bool IsValid() const { return Id != TEXT("Invalid"); }
+};
+
+template<>
+struct TStructOpsTypeTraits<FRPGItemInstance>
+	: public TStructOpsTypeTraitsBase2<FRPGItemInstance>
+{
+	enum
+	{
+		WithNoDestructor = true,
+	};
 };
 
 /* Remember to call MarkArrayDirty if an item is removed,
